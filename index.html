@@ -1,597 +1,1107 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronograma Minimalista - 120 Dias</title>
-    
-    <!-- Tailwind CSS (Nativo) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Inter"', 'sans-serif'],
-                    },
-                    colors: {
-                        base: '#09090b', // Deep gray/black
-                        surface: '#18181b', // Slightly lighter
-                        border: '#27272a',
-                        textMain: '#f4f4f5',
-                        textMuted: '#a1a1aa'
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body {
-            background-color: #09090b;
-            color: #f4f4f5;
-            min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto Aprovação – 120 Dias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Minimalist Scrollbar */
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #52525b; }
+  :root {
+    --bg: #060a12;
+    --bg2: #0d1420;
+    --bg3: #111827;
+    --bg4: #1a2334;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.10);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --muted2: #64748b;
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.12);
+    --indigo: #818cf8;
+    --indigo-dim: rgba(129,140,248,0.12);
+    --emerald: #10b981;
+    --emerald-dim: rgba(16,185,129,0.12);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.12);
+    --rose: #f43f5e;
+    --rose-dim: rgba(244,63,94,0.12);
+    --purple: #a855f7;
+    --purple-dim: rgba(168,85,247,0.12);
+    --pink: #ec4899;
+    --pink-dim: rgba(236,72,153,0.12);
+    --teal: #14b8a6;
+    --teal-dim: rgba(20,184,166,0.12);
+    --cyan: #06b6d4;
+    --cyan-dim: rgba(6,182,212,0.12);
+    --yellow: #eab308;
+    --yellow-dim: rgba(234,179,8,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+  }
 
-        /* Glass Panel Minimalista */
-        .glass-panel {
-            background: rgba(24, 24, 27, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+  html { scroll-behavior: smooth; }
 
-        /* Interações das Tarefas */
-        .task-row { transition: all 0.2s ease; border-left: 3px solid transparent; }
-        .task-row:not(.done):hover { background: rgba(255, 255, 255, 0.03); transform: translateX(2px); }
-        
-        .task-checkbox { transition: all 0.2s ease; }
-        .task-row:not(.done):hover .task-checkbox { border-color: #71717a; }
-        
-        .task-row.done { opacity: 0.5; background: rgba(24, 24, 27, 0.8); border-left-color: #10b981; }
-        .task-row.done .task-title { text-decoration: line-through; color: #71717a; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+    padding: 0;
+  }
 
-        /* Bloqueio de Seleção para Cliques Rápidos */
-        .select-none { user-select: none; -webkit-user-select: none; }
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
 
-        /* Animação Inicial Suave */
-        .animate-fade { animation: fade 0.4s ease-out forwards; }
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  .glow-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 60%);
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between;
+    gap: 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+
+  .header-left h1 {
+    font-size: 28px; font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .header-left h1 .accent { color: var(--blue); }
+  .header-left p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .badge {
+    display: inline-flex; align-items: center;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 100px;
+    background: var(--blue-dim); color: var(--blue);
+    border: 1px solid rgba(59,130,246,0.2);
+    margin-left: 12px; vertical-align: middle;
+  }
+
+  .progress-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    min-width: 280px;
+  }
+
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; font-weight: 600; margin-bottom: 10px;
+    color: var(--muted);
+  }
+
+  .progress-label .pct { color: var(--blue); }
+
+  .progress-bar {
+    height: 6px; background: var(--bg4);
+    border-radius: 100px; overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%; border-radius: 100px;
+    background: var(--blue);
+    transition: width 0.5s ease;
+  }
+
+  .progress-sub {
+    font-size: 11px; color: var(--muted2);
+    margin-top: 8px; text-align: right;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+
+  .tabs {
+    display: flex; background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px; gap: 4px;
+  }
+
+  .tab {
+    display: flex; align-items: center; gap-7px;
+    padding: 8px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    color: var(--muted); cursor: pointer;
+    border: none; background: transparent;
+    transition: all 0.2s;
+    gap: 6px;
+  }
+
+  .tab:hover { color: var(--text); background: var(--bg3); }
+
+  .tab.active {
+    background: var(--bg4); color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--border2);
+  }
+
+  .tab-icon { font-size: 14px; }
+
+  .btn-reset {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 700;
+    color: var(--muted); background: var(--bg2);
+    border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-reset:hover { color: var(--rose); border-color: rgba(244,63,94,0.3); }
+
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 960px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* CALENDAR PANEL */
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    height: 680px;
+    display: flex; flex-direction: column;
+  }
+
+  .panel-title {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted2); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    overflow-y: auto;
+    padding-right: 4px;
+    flex: 1;
+  }
+
+  .cal-grid::-webkit-scrollbar { width: 4px; }
+  .cal-grid::-webkit-scrollbar-track { background: transparent; }
+  .cal-grid::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
+
+  .day-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 8px 4px; border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg3); cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  .day-btn:hover { border-color: var(--border2); background: var(--bg4); }
+
+  .day-btn.selected {
+    background: var(--blue); border-color: var(--blue);
+    box-shadow: 0 0 16px rgba(59,130,246,0.25);
+  }
+
+  .day-btn.done {
+    background: rgba(16,185,129,0.08);
+    border-color: rgba(16,185,129,0.2);
+  }
+
+  .day-btn.rest {
+    background: transparent; border-color: rgba(255,255,255,0.03);
+  }
+
+  .day-num {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    color: var(--muted2); margin-bottom: 2px; letter-spacing: 0.05em;
+  }
+
+  .day-btn.selected .day-num { color: rgba(255,255,255,0.7); }
+
+  .day-date {
+    font-size: 11px; font-weight: 600; color: var(--muted);
+  }
+
+  .day-btn.selected .day-date { color: #fff; }
+  .day-btn.done .day-date { color: var(--emerald); }
+  .day-btn.rest .day-date { color: var(--muted2); opacity: 0.5; }
+
+  .done-dot {
+    position: absolute; top: 5px; right: 5px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--emerald);
+    box-shadow: 0 0 5px var(--emerald);
+  }
+
+  /* TASKS PANEL */
+  .tasks-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    height: 680px;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+
+  .tasks-panel::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .day-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 22px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+    position: relative; z-index: 1; flex-shrink: 0;
+  }
+
+  .day-title {
+    font-size: 36px; font-weight: 900;
+    letter-spacing: -0.03em; color: var(--text);
+    line-height: 1;
+  }
+
+  .day-subtitle { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  .day-badge {
+    display: inline-flex; align-items: center;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 4px 10px;
+    border-radius: 100px; margin-left: 12px; vertical-align: middle;
+  }
+
+  .day-badge.weekday {
+    background: var(--indigo-dim); color: var(--indigo);
+    border: 1px solid rgba(129,140,248,0.2);
+  }
+
+  .day-badge.rest {
+    background: var(--bg3); color: var(--muted2);
+    border: 1px solid var(--border);
+  }
+
+  .nav-arrows { display: flex; gap: 8px; }
+
+  .arrow-btn {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); cursor: pointer;
+    color: var(--muted); font-size: 16px;
+    transition: all 0.2s;
+  }
+
+  .arrow-btn:hover { color: var(--text); border-color: var(--border2); }
+  .arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .tasks-list {
+    flex: 1; overflow-y: auto;
+    padding-right: 6px;
+    position: relative; z-index: 1;
+  }
+
+  .tasks-list::-webkit-scrollbar { width: 4px; }
+  .tasks-list::-webkit-scrollbar-track { background: transparent; }
+  .tasks-list::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
+
+  .task-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .task-item:hover { border-color: var(--border2); background: var(--bg4); transform: translateX(2px); }
+  .task-item.done { opacity: 0.55; background: rgba(16,185,129,0.04); border-color: rgba(16,185,129,0.12); }
+
+  .check {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid var(--bg4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+    color: transparent; font-size: 12px;
+  }
+
+  .task-item:hover .check:not(.checked) { border-color: var(--blue); }
+
+  .check.checked {
+    background: var(--emerald); border-color: var(--emerald);
+    color: #fff; box-shadow: 0 0 8px rgba(16,185,129,0.4);
+  }
+
+  .task-info { flex: 1; min-width: 0; }
+
+  .task-tags { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
+
+  .tag {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 8px;
+    border-radius: 100px; border: 1px solid;
+  }
+
+  .tag-type {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 8px;
+    border-radius: 100px;
+    background: var(--bg4); color: var(--muted2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .task-name {
+    font-size: 14px; font-weight: 500;
+    color: var(--text); line-height: 1.4;
+  }
+
+  .task-item.done .task-name {
+    text-decoration: line-through; color: var(--muted2);
+  }
+
+  /* REST SCREEN */
+  .rest-screen {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 32px;
+  }
+
+  .rest-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin-bottom: 20px;
+  }
+
+  .rest-screen h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .rest-screen p { font-size: 13px; color: var(--muted); max-width: 300px; line-height: 1.6; }
+
+  /* PANORAMIC VIEW */
+  .panoramic {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+  }
+
+  .panoramic-header {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 22px; margin-bottom: 26px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panoramic-header h2 {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+  }
+
+  .panoramic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .subject-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+
+  .subject-card:hover { border-color: var(--border2); }
+
+  .subject-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 14px; margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .subj-count {
+    font-size: 11px; font-weight: 700; color: var(--muted2);
+    background: var(--bg4); padding: 4px 10px;
+    border-radius: 100px; border: 1px solid var(--border);
+  }
+
+  .mini-task {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px; border-radius: 8px;
+    cursor: pointer; transition: all 0.15s;
+    margin-bottom: 5px;
+    border: 1px solid transparent;
+  }
+
+  .mini-task:hover { background: var(--bg4); border-color: var(--border); }
+  .mini-task.done { opacity: 0.45; }
+
+  .mini-check {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 1.5px solid var(--muted2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px; transition: all 0.15s; font-size: 9px;
+    color: transparent;
+  }
+
+  .mini-check.checked {
+    background: var(--emerald); border-color: var(--emerald); color: #fff;
+  }
+
+  .mini-task-info .mini-name {
+    font-size: 12px; font-weight: 500; color: var(--text);
+    line-height: 1.4; margin-bottom: 3px;
+  }
+
+  .mini-task.done .mini-name { text-decoration: line-through; color: var(--muted2); }
+
+  .mini-meta { display: flex; gap: 6px; }
+
+  .mini-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--muted2); text-transform: uppercase;
+  }
+
+  .subj-scroll {
+    max-height: 280px; overflow-y: auto; padding-right: 4px;
+  }
+
+  .subj-scroll::-webkit-scrollbar { width: 3px; }
+  .subj-scroll::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(6,10,18,0.85);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; backdrop-filter: blur(4px);
+  }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    max-width: 420px; width: 100%;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .modal-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--rose-dim); border: 1px solid rgba(244,63,94,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 20px;
+  }
+
+  .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+  .btn-cancel {
+    padding: 9px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); transition: all 0.2s;
+  }
+
+  .btn-cancel:hover { color: var(--text); border-color: var(--border2); }
+
+  .btn-confirm {
+    padding: 9px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    background: var(--rose); border: none;
+    color: #fff; transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(244,63,94,0.3);
+  }
+
+  .btn-confirm:hover { opacity: 0.9; }
+
+  /* ICON DOT */
+  .icon-dot {
+    width: 32px; height: 32px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+</style>
 </head>
-<body class="font-sans pb-16 selection:bg-zinc-800 relative">
+<body>
+<div class="grain"></div>
+<div class="glow-bg"></div>
 
-    <!-- Modal Reset -->
-    <div id="modalReset" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-        <div id="modalContent" class="bg-surface border border-border rounded-2xl p-8 w-full max-w-md transform scale-95 transition-transform duration-300 shadow-2xl">
-            <h2 class="text-xl font-semibold text-white mb-3">Reiniciar Cronograma?</h2>
-            <p class="text-textMuted text-sm leading-relaxed mb-8">
-                Todo o progresso será apagado permanentemente. O plano de 120 dias recomeçará alinhado com a data de hoje.
-            </p>
-            <div class="flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-5 py-2 rounded-lg text-sm font-medium text-textMuted hover:text-white hover:bg-zinc-800 transition-colors select-none">Cancelar</button>
-                <button onclick="executeReset()" class="px-5 py-2 bg-white text-black hover:bg-zinc-200 rounded-lg text-sm font-medium transition-colors select-none">Confirmar Reset</button>
-            </div>
-        </div>
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modal">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <h3>Reiniciar Jornada?</h3>
+    <p>Todo o progresso será apagado e o cronograma recalculado a partir de hoje. Essa ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btn-cancel">Cancelar</button>
+      <button class="btn-confirm" id="btn-confirm">Resetar Agora</button>
     </div>
+  </div>
+</div>
 
-    <!-- Layout Principal -->
-    <div class="container mx-auto max-w-6xl px-4 md:px-8 pt-10 relative z-10">
-        
-        <!-- Dashboard Header -->
-        <header id="dashboard-header" class="mb-10"></header>
-
-        <!-- Navegação de Abas -->
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-            <div class="flex bg-surface p-1 rounded-xl border border-border w-full sm:w-auto">
-                <button id="tab-daily" onclick="switchView('daily')" class="flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none bg-zinc-800 text-white shadow-sm">
-                    Hoje
-                </button>
-                <button id="tab-overview" onclick="switchView('overview')" class="flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none text-textMuted hover:text-white hover:bg-zinc-800/50">
-                    Visão Geral
-                </button>
-            </div>
-
-            <button onclick="openModal()" class="px-4 py-2 rounded-xl text-textMuted hover:text-white text-sm font-medium transition-all hover:bg-surface border border-transparent hover:border-border w-full sm:w-auto flex items-center justify-center gap-2 select-none group">
-                <i class="fa-solid fa-arrow-rotate-left group-hover:-rotate-180 transition-transform duration-500"></i> Reset
-            </button>
-        </div>
-
-        <!-- Área de Conteúdo -->
-        <main id="app-content" class="w-full"></main>
+<div class="container">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <h1>Projeto <span class="accent">Aprovação</span> <span class="badge">120 Dias</span></h1>
+      <p>Aulas Ferretto · Apostila · Literatura URCA — tudo em um único plano.</p>
     </div>
+    <div class="progress-card">
+      <div class="progress-label">
+        <span>Progresso global</span>
+        <span class="pct" id="pct-text">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-sub" id="progress-sub">0 de 0 tarefas</div>
+    </div>
+  </header>
 
-    <script>
-        // ==========================================
-        // 1. BASES DE DADOS
-        // ==========================================
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="tabs">
+      <button class="tab active" id="tab-daily" onclick="setView('daily')">
+        <span class="tab-icon">⚡</span> Hoje
+      </button>
+      <button class="tab" id="tab-list" onclick="setView('list')">
+        <span class="tab-icon">🧩</span> Matérias
+      </button>
+    </div>
+    <button class="btn-reset" onclick="document.getElementById('modal').classList.remove('hidden')">
+      ↺ Recomeçar
+    </button>
+  </nav>
 
-        const mathFerretto = ["Probabilidade: Conceitos iniciais", "Probabilidade: Definição", "Probabilidade: Propriedades", "Probabilidade da união", "Probabilidade da intersecção", "Questões Probabilidade 1", "Probabilidade condicional", "Lei binomial da probabilidade", "Questões Probabilidade 2", "Probabilidade (Questões Gerais)", "Revisão: Probabilidade", "PFC: Parte 1", "PFC: Parte 2", "PFC: Parte 3", "PFC: Parte 4", "Questões de PFC", "Fatorial", "Permutação simples 1", "Permutação simples 2", "Permutação com repetição", "Combinação 1", "Combinação 2", "Arranjos", "Questões: Permutação e combinação", "Análise Combinatória (Questões)", "Permutação Circular", "Soluções Inteiras", "Combinação com Repetição", "Gavetas de Dirichlet", "Super Aula: PFC", "Super Aula: Permutação", "Super Aula: Combinação", "Revisão: Combinatória", "Simulado Matemática", "Eq. reduzida da circunferência", "Eq. geral da circunferência 1", "Eq. geral da circunferência 2", "Posições: Ponto e circunferência", "Posição: Reta e circunferência 1", "Posição: Reta e circunferência 2", "Interseção de circunferências", "Questões de circunferência"];
-        const bioFerretto = ["Ribovírus: Raiva", "Ribovírus: Ebola", "Ribovírus: Caxumba/Sarampo", "Ribovírus: Pólio", "Ribovírus: Hepatites", "Questões Ribovírus", "Desoxivírus: Variola/Mpox", "Desoxivírus: Herpes", "Desoxivírus: HPV", "HIV: Estrutura e ciclo", "HIV: Terapia", "HIV: Prevenção", "Questões Desoxivírus", "Bactérias: Monera", "Bactérias: Célula", "Bactérias: Parede celular", "Bactérias: Reprodução", "Bactérias: Morfologia", "Questões Bactérias", "Vibriões: Cólera", "Espiroquetas: Leptospirose/Sífilis", "Cocos: Gonorreia/Meningite", "Cocos: Streptococcus", "Rickettsia/Chlamydia", "Questões Bacterianas", "Protozoários/Algas", "Trypanosoma cruzi", "Leishmania/Giardia", "Ciliados e rizópodes", "Toxoplasma", "Malária", "Questões Protozoóticas", "Algas: Características", "Algas: Classificação", "Algas: Ciclos", "Questões Algas", "Fungos: Características", "Fungos: Importância", "Fungos: Micoses", "Fungos: Reprodução", "Fungos: Classificação", "Questões Fungos", "Ecologia: Definição", "Ecologia: Comunidades", "Ecologia: Hábitat/Nicho", "Cadeias/Teias", "Questões Intro Ecologia", "Fluxo energia/Termodinâmica", "Produtividade 1", "Produtividade 2", "Pirâmides ecológicas", "Questões Energia", "Ciclos I: Lavoisier", "Ciclo Carbono", "Efeito estufa", "Aquecimento global", "Acidificação oceanos", "Ciclo Oxigênio", "Camada ozônio", "Questões Ciclos I", "Ciclo Nitrogênio 1", "Ciclo Nitrogênio 2", "Ciclo Água", "Ciclo Enxofre", "Ciclo Fósforo", "Questões Ciclos II", "Dinâmica populações 1", "Dinâmica populações 2", "Fatores limitantes", "Controle biológico", "Questões Populações", "Relações ecológicas", "Colônias/Sociedades", "Gregarismo", "Mutualismo", "Comensalismo", "Canibalismo", "Competição", "Predatismo/Parasitismo", "Relações em gráficos", "Questões Relações", "Sucessão: Ecese/Clímax", "Tendências sucessão", "Jovens x Maduros", "Sucessão secundária", "Questões Sucessão", "Biomas Aquáticos", "Talassociclo", "Plâncton/Nécton", "Limnociclo", "Questões Aquáticos", "Epinociclo", "Vegetações mundo", "Vegetações Brasil", "Amazônia", "Cerrado", "Caatinga", "Mata atlântica/Pampas", "Questões Terrestres", "Hipótese Gaia", "Biodiversidade", "Desmatamento", "Fragmentação", "Bioinvasão", "Espécies-chave", "Questões Desequilíbrios", "Poluição química", "Metais pesados", "Inseticidas/Bioacumulação", "Detergentes/Petróleo", "Eutrofização", "Manejo lixo", "Pegada ecológica", "Questões Poluição"];
-        const physFerretto = ["Resistência e Resistor", "1ª Lei de Ohm", "2ª Lei de Ohm", "Questões Leis de Ohm", "Potência/Energia Elétrica", "Potência Elétrica", "Questões Energia", "Associação Série", "Associação Paralelo", "Associação Mista/Curto", "Questões Associação", "Amperímetro/Voltímetro", "Ponte de Wheatstone", "Questões Instrumentos", "Geradores 1", "Geradores 2", "Questões Geradores", "Receptores", "Circuitos (Gerador/Receptor)", "Soma das Tensões", "Leis de Kirchhoff", "Eletromagnetismo", "Questões Eletromag", "Campo Magnético: Fio", "Campo Magnético: Espira", "Questões Campo Mag", "Força Magnética 1", "Força Magnética 2", "Força entre fios", "Questões Força Mag", "Indução Eletromagnética 1", "Indução Eletromagnética 2", "Transformadores", "Questões Indução", "Relatividade 1", "Relatividade 2", "Fator de Lorentz", "Relação Massa Energia", "Questões Relatividade", "Física Quântica: Corpo Negro", "Átomo de Bohr", "Efeito Fotoelétrico", "Questões Física Moderna"];
-        const histFerretto = ["Ditadura: Castelo Branco", "Ditadura: Costa e Silva", "Questões Castelo/Costa", "Ditadura: Médici", "Ditadura: Geisel", "Ditadura: Figueiredo", "Questões Médici/Geisel/Fig", "Nova República: Sarney", "Nova República: Collor", "Nova República: Itamar", "Questões Sarney/Collor", "Nova República: FHC", "Nova República: Lula", "Nova República: Dilma", "Nova República: Temer", "Nova República: Bolsonaro", "Crise de 1929", "Fascismo", "Nazismo", "Totalitarismos Ibéricos", "Questões Entreguerras", "2ª Guerra: Causas", "2ª Guerra: Conflito", "2ª Guerra: Eixo Derrotado", "Conferências 2ª Guerra", "Questões 2ª Guerra", "Guerra Fria", "Revolução Chinesa", "Guerra do Vietnã", "Guerra da Coreia", "Revolução Cubana", "Crise de Berlim", "Guerra do Afeganistão", "Descolonização Asiática", "Descolonização Africana", "Questões Guerra Fria", "Ditaduras América Latina", "Desintegração Bloco Soviético", "Revolução Iraniana", "Guerras do Golfo", "Primavera Árabe", "Questões Mundo Contemporâneo"];
-        const philoFerretto = ["Jürgen Habermas", "Questões Habermas", "Michel Foucault 1", "Michel Foucault 2", "Questões Foucault", "Círculo de Viena", "Gaston Bachelard", "Karl Popper", "Thomas Kuhn", "Questões Filosofia Ciência", "John Rawls", "Hans Jonas", "Questões Rawls/Jonas", "Zygmunt Bauman", "Sigmund Freud", "Byung-Chul Han"];
+  <!-- DAILY VIEW -->
+  <div id="view-daily">
+    <div class="main-grid">
+      <!-- Calendar -->
+      <div class="panel">
+        <div class="panel-title">📅 Visão Diária</div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+      <!-- Tasks -->
+      <div class="tasks-panel">
+        <div class="day-header">
+          <div>
+            <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap">
+              <div class="day-title" id="day-title">Dia 1</div>
+              <span class="day-badge weekday" id="day-badge">Segunda-feira</span>
+            </div>
+            <div class="day-subtitle" id="day-subtitle">Carregando tarefas...</div>
+          </div>
+          <div class="nav-arrows">
+            <button class="arrow-btn" id="btn-prev" onclick="navigateDay(-1)">‹</button>
+            <button class="arrow-btn" id="btn-next" onclick="navigateDay(1)">›</button>
+          </div>
+        </div>
+        <div class="tasks-list" id="tasks-list"></div>
+      </div>
+    </div>
+  </div>
 
-        const apostilaTasks = [
-            { s: 'Matemática', t: 'Aritmética' }, { s: 'Matemática', t: 'Análise Combinatória' }, { s: 'Matemática', t: 'Conjuntos' }, { s: 'Matemática', t: 'Função 1º grau' }, { s: 'Matemática', t: 'Função 2º grau' }, { s: 'Matemática', t: 'Funções' }, { s: 'Matemática', t: 'Geometria analítica' }, { s: 'Matemática', t: 'Geometria Espacial' }, { s: 'Matemática', t: 'Geometria Plana' }, { s: 'Matemática', t: 'PA e PG' }, { s: 'Matemática', t: 'Matemática financeira' }, { s: 'Matemática', t: 'Razão e Proporção' }, { s: 'Matemática', t: 'Operações e divisibilidade' }, { s: 'Matemática', t: 'Sistemas/Sequências' }, { s: 'Matemática', t: 'Logaritmos' }, { s: 'Matemática', t: 'Polinômios/Complexos' }, { s: 'Matemática', t: 'Trigonometria' }, { s: 'Matemática', t: 'Matrizes/Determinantes' }, { s: 'Matemática', t: 'Expressões algébricas' }, { s: 'Matemática', t: 'Produtos notáveis' },
-            { s: 'Física', t: 'Análise dimensional/Vetores' }, { s: 'Física', t: 'Cinemática' }, { s: 'Física', t: 'Dinâmica' }, { s: 'Física', t: 'Eletrodinâmica' }, { s: 'Física', t: 'Termodinâmica' }, { s: 'Física', t: 'Eletrostática/Capacitores' }, { s: 'Física', t: 'Energia e Trabalho' }, { s: 'Física', t: 'Gravitação' }, { s: 'Física', t: 'Hidrostática' }, { s: 'Física', t: 'Magnetismo' }, { s: 'Física', t: 'Ondulatória/Acústica' }, { s: 'Física', t: 'Óptica' }, { s: 'Física', t: 'MHS' }, { s: 'Física', t: 'Calorimetria' }, { s: 'Física', t: 'Momento linear' },
-            { s: 'Química', t: 'Análise de espécies' }, { s: 'Química', t: 'Atomística' }, { s: 'Química', t: 'Cinética química' }, { s: 'Química', t: 'Química ambiental' }, { s: 'Química', t: 'Tabela Periódica' }, { s: 'Química', t: 'Eletrólise/Eletroquímica' }, { s: 'Química', t: 'Equilíbrio químico' }, { s: 'Química', t: 'Estequiometria' }, { s: 'Química', t: 'Forças intermoleculares' }, { s: 'Química', t: 'Gases' }, { s: 'Química', t: 'Isomeria' }, { s: 'Química', t: 'Leis ponderais' }, { s: 'Química', t: 'Ligações químicas' }, { s: 'Química', t: 'Separação de misturas' }, { s: 'Química', t: 'Polímeros' }, { s: 'Química', t: 'Prop. coligativas' }, { s: 'Química', t: 'Inorgânica/Orgânica' }, { s: 'Química', t: 'Reações' }, { s: 'Química', t: 'Termoquímica' },
-            { s: 'Biologia', t: 'Origem da vida' }, { s: 'Biologia', t: 'Taxonomia' }, { s: 'Biologia', t: 'Microbiologia' }, { s: 'Biologia', t: 'Bioquímica' }, { s: 'Biologia', t: 'Botânica' }, { s: 'Biologia', t: 'Citologia' }, { s: 'Biologia', t: 'Ecologia' }, { s: 'Biologia', t: 'Genética' }, { s: 'Biologia', t: 'Parasitologia' }, { s: 'Biologia', t: 'Zoologia' }, { s: 'Biologia', t: 'Fisiologia' },
-            { s: 'Português', t: 'Interpretação de texto' }, { s: 'Português', t: 'Literatura Geral' }, { s: 'Português', t: 'Linguística' }, { s: 'Português', t: 'Tipologia textual' }, { s: 'Português', t: 'Coesão' }, { s: 'Português', t: 'Figuras de linguagem' }, { s: 'Português', t: 'Gêneros textuais' }, { s: 'Português', t: 'Gramática/Sintaxe' },
-            { s: 'História', t: 'Pré-história/Antiguidade' }, { s: 'História', t: 'Idade Média/Moderna' }, { s: 'História', t: 'Idade Contemporânea' }, { s: 'História', t: 'Brasil Colonial' }, { s: 'História', t: 'Império (Regência/Reinado)' }, { s: 'História', t: 'Era Vargas/Ditadura' }, { s: 'História', t: 'História do Ceará' },
-            { s: 'Geografia', t: 'Agricultura/Globalização' }, { s: 'Geografia', t: 'População/Urbanização' }, { s: 'Geografia', t: 'Cartografia/Climatologia' }, { s: 'Geografia', t: 'Hidrografia/Relevo' }, { s: 'Geografia', t: 'Geografia do Ceará' },
-            { s: 'Filo/Socio', t: 'Filosofia Clássica/Medieval' }, { s: 'Filo/Socio', t: 'Contratualismo/Moderna' }, { s: 'Filo/Socio', t: 'Escola Frankfurt' }, { s: 'Filo/Socio', t: 'Sociologia Brasileira' }
-        ];
+  <!-- PANORAMIC VIEW -->
+  <div id="view-list" class="hidden">
+    <div class="panoramic">
+      <div class="panoramic-header">
+        <div class="icon-dot" style="background:var(--indigo-dim);color:var(--indigo)">🎯</div>
+        <h2>Visão Panorâmica</h2>
+      </div>
+      <div class="panoramic-grid" id="panoramic-grid"></div>
+    </div>
+  </div>
+</div>
 
-        const urcaTasks = [
-            "Fase 1: O que é Literatura? e Funções", "Fase 1: Gênero Lírico (Estrutura e Métrica)", "Fase 1: Gênero Épico/Narrativo e Dramático", "Fase 1: Figuras de Palavra, Pensamento e Sintaxe", "Fase 1: Intertextualidade e Interdiscursividade", "Fase 1: Revisão Teoria Literária",
-            "Fase 2: Trovadorismo (Cantigas de Amor/Amigo)", "Fase 2: Trovadorismo (Escárnio/Maldizer) e Prosa", "Fase 2: Humanismo e Teatro de Gil Vicente", "Fase 2: Classicismo (Sá de Miranda e Camões Lírico)", "Fase 2: Camões Épico (Os Lusíadas I)", "Fase 2: Camões Épico (Os Lusíadas II e Eixo Épico)", "Fase 2: Revisão Origens e Portugal",
-            "Fase 3: Quinhentismo (Informativa e Catequese)", "Fase 3: Barroco: Contexto e Bento Teixeira", "Fase 3: Gregório de Matos (Lírica e Satírica)", "Fase 3: Padre Antônio Vieira (Sermões I e II)", "Fase 3: Arcadismo e Cláudio Manuel da Costa", "Fase 3: Tomás Antônio Gonzaga", "Fase 3: Épico no Arcadismo (Uraguai e Caramuru)", "Fase 3: Revisão Barroco e Arcadismo",
-            "Fase 4: Romantismo Contexto e 1ª Geração", "Fase 4: Romantismo 2ª e 3ª Geração", "Fase 4: Prosa Romântica (Macedo e Manuel Antônio)", "Fase 4: José de Alencar (Iracema e Romances Urbanos)", "Fase 4: Regionalismo Romântico e Teatro", "Fase 4: Romantismo no Ceará e Eixo Nacionalismo", "Fase 4: Revisão Romantismo",
-            "Fase 5: Realismo/Naturalismo (Contexto e Teorias)", "Fase 5: Machado de Assis (Brás Cubas e Dom Casmurro)", "Fase 5: Machado de Assis (Contos) e Raul Pompeia", "Fase 5: Aluísio Azevedo (O Cortiço)", "Fase 5: Naturalismo no Ceará (Adolfo Caminha e Domingos)", "Fase 5: Naturalismo no Ceará (Oliveira Paiva)", "Fase 5: Realismo em Portugal (Eça de Queiroz)", "Fase 5: Parnasianismo (Bilac) e Simbolismo (Cruz e Sousa)", "Fase 5: Revisão Realismo/Naturalismo",
-            "Fase 6: Pré-Modernismo (Euclides e Lima Barreto)", "Fase 6: Pré-Modernismo (Lobato e Augusto dos Anjos)", "Fase 6: Modernismo Portugal (Fernando Pessoa Ortônimo)", "Fase 6: Fernando Pessoa (Caeiro, Reis e Campos)", "Fase 6: Semana de Arte Moderna de 1922", "Fase 6: 1ª Geração (Oswald, Mário e Bandeira)", "Fase 6: Revisão 1ª Geração",
-            "Fase 7: 2ª Geração Prosa (Rachel de Queiroz - O Quinze)", "Fase 7: Graciliano Ramos (Vidas Secas e São Bernardo)", "Fase 7: Jorge Amado e José Lins do Rego", "Fase 7: 2ª Geração Poesia (Drummond, Cecília e Vinicius)", "Fase 7: 3ª Geração (Guimarães Rosa e Clarice Lispector)", "Fase 7: João Cabral de Melo Neto", "Fase 7: Literatura Cearense Moderna (Patativa do Assaré)", "Fase 7: Revisão Modernismo",
-            "Fase 8: Literaturas Africanas (Angola e Moçambique)", "Fase 8: Eixo URCA (Messiânico e Representação do Sertão)", "Fase 8: Contemporânea Nacional (Suassuna, Raduan Nassar)", "Fase 8: Contemporânea Cariri/Ceará (Ronaldo Correia)", "Fase 8: Análise Perfil URCA e Simulado",
-            "Fase 9: Revisão Era Colonial e Era Nacional I", "Fase 9: Revisão Modernismo", "Fase 9: Obras Obrigatórias URCA", "Fase 9: Simulado Final Literatura URCA"
-        ];
+<script>
+// =====================================================================
+// DATA: FERRETTO
+// =====================================================================
+const mathTasks = [
+  "Probabilidade – Conceitos iniciais","Probabilidade – Definição","Probabilidade – Propriedades","Probabilidade da união","Probabilidade da intersecção","Questões de probabilidade 1","Probabilidade condicional","Lei binomial da probabilidade","Questões de probabilidade 2","Probabilidade (Questões)","Revisão – Probabilidade",
+  "Princípio fundamental da contagem (PFC) – Parte 1","Princípio fundamental da contagem (PFC) – Parte 2","Princípio fundamental da contagem (PFC) – Parte 3","Princípio fundamental da contagem (PFC) – Parte 4","Questões de PFC","Fatorial de um número natural","Permutação simples – Parte 1","Permutação simples – Parte 2","Permutação com repetição","Combinação – Parte 1","Combinação – Parte 2","Arranjos","Questões de permutação e combinação","Análise Combinatória (Questões)","Permutação Circular (Aprofundamento)","Soluções Inteiras e Não Negativas de Equação Linear (Aprofundamento)","Combinação com Repetição (Aprofundamento)","Princípio das Gavetas de Dirichlet (Aprofundamento)","Super Aula de PFC (Aprofundamento)","Super Aula de Permutação (Aprofundamento)","Super Aula de Combinação (Aprofundamento)","Revisão – Análise Combinatória","Simulado Matemática",
+  "Equação reduzida da circunferência","Equação geral da circunferência – Parte 1","Equação geral da circunferência – Parte 2","Posições relativas entre ponto e circunferência","Posição relativa entre reta e circunferência – Parte 1","Posição relativa entre reta e circunferência – Parte 2","Interseção de circunferências","Questões de circunferência","Circunferência (Questões)"
+];
+const bioTasks = [
+  "Doenças causadas por ribovírus: Raiva ou hidrofobia","Doenças causadas por ribovírus: Febre hemorrágica do ebola","Doenças causadas por ribovírus: Caxumba, sarampo e rubéola","Doenças causadas por ribovírus: Poliomielite e rotavirose","Doenças causadas por ribovírus: Hepatites virais","Doenças Causadas por Ribovírus (Questões)","Doenças causadas por desoxivírus e retrovírus: Varíola e Mpox","Doenças causadas por desoxivírus e retrovírus: Herpes simples e catapora/Herpes zoster","Doenças causadas por desoxivírus e retrovírus: HPV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Estrutura, transmissão e ciclo do HIV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Terapia ARV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Fases da infecção e prevenção","Doenças Causadas por Desoxivírus e Retrovírus (Questões)","Bactérias: Reino monera, eubactérias e arqueobactérias","Bactérias: Célula bacteriana","Bactérias: Parede celular bacteriana","Bactérias: Reprodução e recombinação gênica em bactérias","Bactérias: Morfologia das bactérias","Bactérias (Questões)","Doenças causadas por bactérias: Por vibriões: Cólera","Doenças causadas por bactérias: Por espiroquetas: Leptospirose e sífilis","Doenças causadas por bactérias: Por cocos: Gonorreia, meningite e pneumonia","Doenças causadas por bactérias: Por Cocos: Infecções por streptococcus e staphylococcus","Doenças causadas por bactérias: Rickettsia, chlamydia e mycoplasma","Doenças Bacterianas (Questões)","Protozoários e doenças: Reino Protista, protozoários e algas","Protozoários e doenças: Trypanosoma cruzi","Protozoários e doenças: Leishmania sp e giardia lamblia","Protozoários e doenças: Protozoários ciliados e rizópodes","Protozoários e doenças: Toxoplasma gondii","Protozoários e doenças: Malária","Protozoários e Doenças Protozoóticas (Questões)","Algas: Características gerais e importância","Algas: Classificação","Algas: Ciclos de vida","Algas (Questões)","Fungos: Características gerais","Fungos: Importância","Fungos: Micoses","Fungos: Reprodução","Fungos: Classificação","Fungos (Questões)",
+  "Introdução à ecologia: Definição e campo de estudo","Introdução à ecologia: Comunidades nos ecossistemas","Introdução à ecologia: Hábitat e nicho ecológico","Introdução à ecologia: Cadeias e teias alimentares","Introdução à Ecologia (Questões)","Fluxo de energia e 2ª lei da termodinâmica","Fluxo de energia: Produtividade líquida, bruta e taxa de respiração","Fluxo de energia: Produtividade nas cadeias alimentares","Fluxo de energia: Produtividade e alimentação humana","Fluxo de energia: Pirâmides ecológicas","Fluxo de Energia (Questões)","Ciclos biogeoquímicos I: Ciclo do carbono","Ciclos biogeoquímicos I: Gases de efeito estufa","Ciclos biogeoquímicos I: Efeito estufa e aquecimento global","Ciclos biogeoquímicos I: Combate ao aquecimento global","Ciclos biogeoquímicos I: Acidificação dos oceanos","Ciclos biogeoquímicos I: Ciclo do oxigênio","Ciclos biogeoquímicos I: Camada de ozônio","Ciclos Biogeoquímicos I (Questões)","Ciclos biogeoquímicos II: Ciclo do nitrogênio","Ciclos biogeoquímicos II: Etapas do ciclo do nitrogênio","Ciclos biogeoquímicos II: Ciclo da água","Ciclos biogeoquímicos II: Ciclo do enxofre e chuvas ácidas","Ciclos biogeoquímicos II: Ciclo do fósforo","Ciclos Biogeoquímicos II (Questões)","Dinâmica das populações: Potencial biótico e curva de crescimento","Dinâmica das populações: Crescimento e densidade populacional","Dinâmica das populações: Fatores limitantes","Dinâmica das populações: Controle biológico","Dinâmica das Populações (Questões)","Relações ecológicas","Relações ecológicas: Colônias e sociedades","Relações ecológicas: Gregarismo","Relações ecológicas: Mutualismo e protocooperação","Relações ecológicas: Comensalismo e inquilinismo","Relações ecológicas: Canibalismo","Relações ecológicas: Competição e amensalismo","Relações ecológicas: Predatismo, parasitismo, herbivorismo e esclavagismo","Relações ecológicas: Relações em gráficos","Relações Ecológicas (Questões)","Sucessão ecológica: Ecese, séries e clímax","Sucessão ecológica: Tendências ao longo da sucessão","Sucessão ecológica: Ecossistemas jovens x maduros","Sucessão ecológica: Sucessão 2ª em áreas desmatadas","Sucessão Ecológica (Questões)","Biomas aquáticos: Biosfera e biociclos","Biomas aquáticos: Talassociclo","Biomas aquáticos: Plâncton, nécton e bênton","Biomas aquáticos: Limnociclo","Biosfera – Biomas Aquáticos (Questões)","Biomas terrestres: Epinociclo","Biomas terrestres: Principais vegetações do mundo","Biomas terrestres: Vegetações do Brasil","Biomas terrestres: Floresta amazônica","Biomas terrestres: Cerrado","Biomas terrestres: Caatinga","Biomas terrestres: Mata atlântica, araucária, pampas, pantanal, cocais e manguezais","Biosfera – Biomas Terrestres (Questões)","Desequilíbrios ecológicos: Hipótese Gaia","Desequilíbrios ecológicos: Biodiversidade","Desequilíbrios ecológicos: Desmatamento e queimadas","Desequilíbrios ecológicos: Fragmentação de ecossistemas","Desequilíbrios ecológicos: Bioinvasão","Desequilíbrios ecológicos: Espécies-chave, conservação e preservação","Desequilíbrios Ecológicos (Questões)","Poluição: Biológica, física e química","Poluição: Por metais pesados","Poluição: Por inseticidas, biomagnificação e bioacumulação","Poluição: Por detergentes e petróleo","Poluição: Eutrofização","Poluição: Manejo do lixo","Poluição: Pegada ecológica, desenvolvimento sustentável, 3R e 5R","Poluição (Questões)"
+];
+const physTasks = [
+  "Resistência Elétrica e Resistor","Primeira Lei de Ohm","Segunda Lei de Ohm","Leis de Ohm (Questões)","Potência e Energia Elétrica","Potência Elétrica","Potência e Energia (Questões)","Associação de Resistores em Série","Associação de Resistores em Paralelo","Associação Mista de Resistores e Curto Circuito","Associação de Resistores (Questões)","Amperímetro e Voltímetro","Ponte de Wheatstone","Instrumentos (Questões)","Geradores – Parte 01","Geradores – Parte 02","Geradores (Questões)","Receptores","Circuitos com Geradores e Receptores","Soma das Tensões em um Circuito","Leis de Kirchhoff",
+  "Fundamentos do Eletromagnetismo","Fundamentos do Eletromagnetismo (Questões)","Fontes de Campo Magnético – Fio","Fontes de Campo Magnético – Espira e Solenoide","Fontes de Campo Magnético (Questões)","Força Magnética – Parte 01","Força Magnética – Parte 02","Força magnética sobre um fio e entre fios paralelos","Força Magnética (Questões)","Indução Eletromagnética – Parte 01","Indução Eletromagnética – Parte 02","Transformadores","Indução Eletromagnética (Questões)",
+  "Teoria da Relatividade – Parte 01","Teoria da Relatividade – Parte 02","Dedução do Fator de Lorentz","Relação Massa e Energia","Teoria da Relatividade (Questões)","Física Quântica – Radiação do Corpo Negro","Física Quântica – Átomo de Bohr","Efeito Fotoelétrico","Física Quântica e Efeito Fotoelétrico (Questões)"
+];
+const histTasks = [
+  "Ditadura Militar – Castelo Branco","Ditadura Militar – Costa e Silva","Ditadura Militar – Castelo Branco e Costa e Silva (Questões)","Ditadura Militar – Médici","Ditadura Militar – Geisel","Ditadura Militar – Figueiredo","Ditadura Militar – Médici, Geisel e Figueiredo (Questões)","República Nova – Eleição de Tancredo e Governo Sarney","República Nova – Collor","República Nova – Itamar Franco","República Nova – Tancredo a Itamar Franco (Questões)","República Nova – Fernando Henrique Cardoso","República Nova – Lula","República Nova – Dilma","República Nova – Temer","República Nova – Bolsonaro",
+  "Crise de 1929","Fascismo Italiano","Nazismo Alemão","Totalitarismos Ibéricos","Período Entreguerra (Questões)","Segunda Guerra Mundial – Causas","Segunda Guerra Mundial – O Conflito","Segunda Guerra Mundial – O Eixo Derrotado","Conferências da Segunda Guerra","Segunda Guerra Mundial (Questões)","Guerra Fria","Revolução Chinesa","Guerra do Vietnã","Guerra da Coreia","Revolução Cubana","Crise de Berlim","Guerra do Afeganistão","Descolonização Asiática","Descolonização Africana","Guerra Fria (Questões)","Ditaduras na América Latina","Desintegração do Bloco Soviético","Revolução Iraniana e Guerra Irã–Iraque","Guerras do Golfo e Guerra do Afeganistão","Primavera Árabe","Mundo Contemporâneo (Questões)"
+];
+const philoTasks = [
+  "Jürgen Habermas","Jurgen Habermas (Questões)","Michel Foucault – Parte 1","Michel Foucault – Parte 2","Michel Foucault (Questões)","Círculo de Viena","Gaston Bachelard","Karl Popper","Thomas Kuhn","Filosofia da Ciência (Questões)","John Rawls","Hans Jonas","John Rawls e Hans Jonas (Questões)","Zygmunt Bauman (Aprofundamento)","Sigmund Freud (Aprofundamento)","Byung-Chul Han (Aprofundamento)"
+];
 
-        // ==========================================
-        // 2. ALGORITMO ROUND-ROBIN (Progressão Uniforme)
-        // ==========================================
-        // Esta função garante que as matérias rodam de forma igual
-        function createRoundRobin(poolsObj) {
-            const keys = Object.keys(poolsObj);
-            let currentIndex = 0;
-            return function pull() {
-                let attempts = 0;
-                while(attempts < keys.length) {
-                    const key = keys[currentIndex];
-                    currentIndex = (currentIndex + 1) % keys.length;
-                    if(poolsObj[key].length > 0) {
-                        return { subject: key, title: poolsObj[key].shift() };
-                    }
-                    attempts++;
-                }
-                return null;
-            }
+// =====================================================================
+// DATA: APOSTILA
+// =====================================================================
+const apostilaMath = ['Aritmética','Análise Combinatória','Conjuntos','Função e equação do 1º grau','Função e equação do 2º grau','Funções','Geometria analítica','Geometria Espacial','Geometria Plana','Progressão aritmética','Progressão geométrica','Matemática financeira','Razão e Proporção','Operações básicas e divisibilidade','Sistemas e sequências','Logaritmos','Polinômios e complexos','Trigonometria','Matrizes e determinantes','Expressão algébrica','Inequação e irracionais','Produtos notáveis'];
+const apostilaPhys = ['Análise dimensional','Cinemática','Dinâmica','Eletrodinâmica','Termodinâmica','Física elétrica e capacitores','Energia','Estática, eletrostática e trabalho','Gravitação','Hidrostática','Magnetismo','Ondulatória e acústica','Óptica','Movimento harmônico simples','Calorimetria, termologia e calor','Momento linear','Análise vetorial e escalar'];
+const apostilaChem = ['Análise de espécies químicas','Atomística','Bioquímica','Cinética química','Química ambiental','Propriedades periódicas','Coloides','Eletrólise','Eletroquímica','Equilíbrio químico','Estequiometria','Forças intermoleculares','Gases','Isomeria','Materiais de laboratório','Leis ponderais','Ligações químicas','Métodos de separação de misturas','Polímeros','Propriedades coligativas','Química inorgânica','Química orgânica','Reações químicas','Termoquímica'];
+const apostilaBio = ['Origem da vida','Taxonomia e sistemática','Microbiologia','Seres vivos e reprodução','Bioquímica','Botânica','Citologia','Ecologia','Genética','Parasitologia','Zoologia','Histologia e Fisiologia'];
+const apostilaPort = ['Interpretação de texto','Literatura','Linguística e aspectos da linguagem','Estrutura e tipologia textual','Coesão textual','Discurso e vozes do texto','Estilística e vícios de linguagem','Figuras e funções da linguagem','Gêneros textuais','Gramática','Morfologia textual','Pontuação','Semântica','Sintaxe','Verbo'];
+const apostilaEdFisica = ['Saúde','Esporte e manifestações culturais','Causas sociais'];
+const apostilaHist = ['Historiografia e pré-história','Idade antiga','Idade média','Idade moderna','Idade contemporânea','Atualidades','Brasil colonial','Período regencial','Primeiro reinado','Segundo reinado','Brasil república','Era vargas','Ditadura','História do Ceará'];
+const apostilaGeo = ['Agricultura','Conceitos geográficos','Geopolítica','Globalização','Meio ambiente','População','Transporte','Urbanização','Cartografia','Climatologia','Hidrografia','Fontes de energia','Regiões','Relevo','Geologia','Vegetações e biomas','Geografia do Ceará'];
+const apostilaPhilo = ['Surgimento da filosofia','Filosofia clássica','Contratualismo','Direitos humanos e movimentos sociais','Escola de Frankfurt','Filosofia Contemporânea','Filosofia e poder','Filosofia e política','Filosofia medieval','Filosofia moderna','Mitologia','Liberalismo, silogismo e materialismo histórico','Indústria, cultura, estética e arte','Racionalismo e epistemologia','Filosofia da Ciência'];
+const apostilaSocio = ['Surgimento da sociologia','Desigualdade e preconceito','Escola de Frankfurt','Globalização e cultura','Juventude, diversidade e violência','Movimentos e problemas sociais','Relações étnico-raciais','Meio ambiente','Sociedade, estado e poder','Sociologia brasileira','Teóricos da sociologia','Trabalho e cidadania','Sociologia da religião'];
+
+// =====================================================================
+// DATA: LITERATURA URCA (120 dias, 3x por semana, ~40 sessões)
+// =====================================================================
+const literaturaItems = [
+  // Fase 1: Teoria Literária
+  "Teoria: Conceito de literatura, denotação e conotação","Teoria: Funções da Linguagem (Emotiva, Conativa, Referencial, Poética)","Teoria: Gênero Lírico – metrificação e escansão poética","Teoria: Gênero Épico/Narrativo – elementos da narrativa","Teoria: Gênero Dramático – estrutura e evolução histórica","Teoria: Figuras de Linguagem I – Metáfora, Metonímia, Antítese, Personificação","Teoria: Figuras de Linguagem II – Elipse, Hipérbato, Aliteração, Assonância","Teoria: Intertextualidade – Paródia, Paráfrase, Pastiche","Revisão Ativa: 15 exercícios sobre Gêneros e Figuras de Linguagem","Mapa Mental: Figuras de Linguagem e Funções da Linguagem",
+  // Fase 2: Trovadorismo ao Classicismo
+  "Trovadorismo: Lírica Galego-Portuguesa e contexto histórico","Trovadorismo: Cantigas de Amor e Cantigas de Amigo","Trovadorismo: Cantigas de Escárnio e Maldizer","Humanismo: Prosa e Teatro Medieval; Novelas de Cavalaria","Humanismo: Poesia Palaciana e Cancioneiro Geral de Garcia de Resende","Humanismo: Gil Vicente e o Teatro Vicentino – Auto da Barca do Inferno","Humanismo: Cronistas Medievais – Fernão Lopes","Classicismo: Contexto, Renascimento e a 'Medida Nova' de Sá de Miranda","Camões Lírico: Soneto camoniano, platonismo, 'desconcerto do mundo'","Camões Épico I: Os Lusíadas – Estrutura formal e estrofe real","Camões Épico II: Os Lusíadas – Inês de Castro, Velho do Restelo, Adamastor","Eixo Temático: A presença do épico nas literaturas lusófonas","Questões: Trovadorismo, Gil Vicente e Camões","Fichamento: Cantigas de Amigo vs. Amor | Camões Lírico vs. Épico",
+  // Fase 3: Brasil Colonial e Barroco
+  "Quinhentismo: A Carta de Pero Vaz de Caminha – olhar do colonizador","Quinhentismo: Literatura jesuítica e Padre José de Anchieta","Barroco: Contexto histórico, dualismo, Cultismo e Conceptismo","Barroco: Bento Teixeira e o poema Prosopopeia","Barroco: Gregório de Matos – poesia lírica amorosa e filosófica","Barroco: Gregório de Matos 'Boca do Inferno' – poesia satírica","Barroco: Padre Antônio Vieira – Sermão da Sexagésima","Barroco: Padre Antônio Vieira – Sermão de Santo António aos Peixes","Arcadismo: Contexto, bucolismo, fugere urbem, locus amoenus","Arcadismo: Cláudio Manuel da Costa – Obras e paisagem mineira","Arcadismo: Tomás Antônio Gonzaga – Marília de Dirceu","Arcadismo: Gonzaga – Cartas Chilenas; Basílio da Gama – O Uraguai","Questões URCA: Barroco e Arcadismo","Quadro Comparativo: Barroco vs. Arcadismo",
+  // Fase 4: Romantismo
+  "Romantismo: Contexto histórico e características gerais","Poesia Romântica 1ª Geração: Gonçalves Dias – I-Juca-Pirama, Canção do Exílio","Poesia Romântica 2ª Geração: Álvares de Azevedo – Noite na Taverna","Poesia Romântica 3ª Geração: Castro Alves – O Navio Negreiro","Prosa Romântica: Joaquim Manuel de Macedo – A Moreninha","Prosa Romântica: Manuel Antônio de Almeida – Memórias de um Sargento de Milícias","José de Alencar – O Guarani, Iracema, Ubirajara (Romance Indianista)","José de Alencar – Senhora e Lucíola (Romance Urbano)","Regionalism Romântico: Bernardo Guimarães – O Seminarista, A Escrava Isaura","Teatro Romântico: Martins Pena – O Noviço","Romantismo no Ceará: Juvenal Galeno e as primeiras agremiações literárias","Eixo Temático: Nacionalismo Romântico e construção do 'ser brasileiro'","Questões URCA: Romantismo – José de Alencar, Iracema e Castro Alves","Fichamento: Personagens de Iracema, Senhora e O Seminarista",
+  // Fase 5: Realismo, Naturalismo, Parnasianismo, Simbolismo
+  "Realismo e Naturalismo: Contexto científico (Positivismo, Determinismo, Darwin)","Machado de Assis: Fase Romântica vs. Fase Realista","Machado de Assis: Memórias Póstumas de Brás Cubas – ironia e metalinguagem","Machado de Assis: Dom Casmurro e Quincas Borba","Machado de Assis: Contos – O Alienista, A Cartomante, Pai contra Mãe","Aluísio Azevedo: O Cortiço – determinismo, zoomorfização","Raul Pompeia: O Ateneu – romance de formação e análise psicológica","[FOCO URCA] Adolfo Caminha: Bom Crioulo e A Normalista","[FOCO URCA] Domingos Olímpio: Luzia-Homem – determinismo da seca do Ceará","[FOCO URCA] Manuel de Oliveira Paiva: Dona Guidinha do Poço – coronelismo","[FOCO URCA] Padaria Espiritual (1892): Antônio Sales, revista O Pão e sátira antiburguesa","Eça de Queiroz: O Primo Basílio e Os Maias","Parnasianismo: Olavo Bilac, 'Arte pela Arte', rigor formal","Simbolismo: Cruz e Sousa; Alphonsus de Guimaraens – Ismália","Questões URCA: Naturalismo Cearense, Padaria Espiritual, Parnasianismo","Redação Comparativa: Naturalismos no Ceará – seca, sertão e determinismo",
+  // Fase 6: Modernismo 1ª Geração
+  "Pré-Modernismo: Canudos, Chibata, Vacina – o Brasil não oficial","Euclides da Cunha: Os Sertões – estrutura, determinismo, massacre de Canudos","Lima Barreto: Triste Fim de Policarpo Quaresma","Monteiro Lobato (Jeca Tatu) e Augusto dos Anjos (Eu – poesia científica)","Modernismo em Portugal: Orpheu 1915, Mário de Sá-Carneiro","Fernando Pessoa Ortônimo: dor de pensar, fingimento poético","Fernando Pessoa / Alberto Caeiro: objetivismo sensorial, recusa à metafísica","Fernando Pessoa / Ricardo Reis: epicurismo e estoicismo","Fernando Pessoa / Álvaro de Campos: futurismo e Tabacaria","Modernismo Brasileiro: Semana de Arte Moderna de 1922","1ª Geração: Oswald de Andrade – Manifesto Antropofágico","1ª Geração: Mário de Andrade – Macunaíma","1ª Geração: Manuel Bandeira – Pasárgada e a poética do cotidiano","Quadro dos Heterônimos de Pessoa + 10 questões sobre Modernismo 1922",
+  // Fase 7: Modernismo 2ª e 3ª Gerações + Ceará
+  "2ª Geração: Contexto da Prosa de 30 – neorregionalismo nordestino","Rachel de Queiroz: O Quinze – seca de 1915 no Ceará","Graciliano Ramos: Vidas Secas – Fabiano e a cachorra Baleia","Graciliano Ramos: São Bernardo e Angústia","Jorge Amado: Capitães da Areia; José Lins do Rego: Menino de Engenho","Carlos Drummond de Andrade: o 'gauche' na vida, fases poéticas","Cecília Meireles: Romanceiro da Inconfidência; Vinicius de Moraes","3ª Geração: João Guimarães Rosa – Grande Sertão: Veredas","3ª Geração: Clarice Lispector – A Hora da Estrela, epifania e fluxo de consciência","3ª Geração: João Cabral de Melo Neto – Morte e Vida Severina","[FOCO URCA] Moreira Campos: conto cearense e realismo psicológico","[FOCO URCA] Patativa do Assaré: Triste Partida, Vaca Estrela e Boi Fubá","Questões URCA: Romance de 30 (O Quinze) e Poesia de 30","Análise Comparada: Fabiano (Vidas Secas) vs. Chico Bento (O Quinze)",
+  // Fase 8: Literaturas Africanas + Eixos URCA
+  "Literaturas Africanas: Contexto das Independências lusófonas (Angola, Moçambique...)","Angola: Luandino Vieira (Luuanda) e Pepetela (Mayombe)","Moçambique: Mia Couto (Terra Sonâmbula) e Paulina Chiziane (Niketche)","Eixo Temático URCA: Elementos Messiânicos e Sebastianistas nas literaturas lusófonas","Eixo Temático URCA: O sertão como espaço místico, violência e resistência","Literatura Contemporânea: Ariano Suassuna (Auto da Compadecida), Raduan Nassar","[FOCO URCA] Ronaldo Correia de Brito – Faca (contos do sertão); Xico Sá – Big Jato","Análise de provas anteriores da URCA – tendências e obras indicadas","Simulado: 20 questões de Literaturas Africanas, Cearenses e Eixos Temáticos","Resumo Crítico: Romance cearense contemporâneo – memória e violência",
+  // Fase 9: Revisão Geral
+  "Revisão: Era Colonial (Quinhentismo, Barroco, Arcadismo) + 10 questões","Revisão: Romantismo, Realismo, Naturalismo, Parnasianismo, Simbolismo + 15 questões URCA","Revisão: Modernismo (1922, 30, 45, Fernando Pessoa) + 15 questões","Obras Obrigatórias: Revisão de fichas – enredo, personagens, relevância social","Simulado Completo: Prova de Língua Portuguesa/Literatura URCA (tempo real)","Revisão Final: Figuras de Linguagem, mapas mentais + descanso mental pré-prova"
+];
+
+// =====================================================================
+// SCHEDULE GENERATION
+// =====================================================================
+function uid() { return Math.random().toString(36).substr(2, 9); }
+
+function generateSchedule() {
+  const ferrettoPools = {
+    'Matemática': [...mathTasks],
+    'Biologia': [...bioTasks],
+    'Física': [...physTasks],
+    'História': [...histTasks],
+    'Filosofia': [...philoTasks]
+  };
+  const apostilaPools = {
+    'Matemática (Apostila)': [...apostilaMath],
+    'Física (Apostila)': [...apostilaPhys],
+    'Química (Apostila)': [...apostilaChem],
+    'Biologia (Apostila)': [...apostilaBio],
+    'Português (Apostila)': [...apostilaPort],
+    'Ed. Física (Apostila)': [...apostilaEdFisica],
+    'História (Apostila)': [...apostilaHist],
+    'Geografia (Apostila)': [...apostilaGeo],
+    'Filosofia (Apostila)': [...apostilaPhilo],
+    'Sociologia (Apostila)': [...apostilaSocio]
+  };
+  const litPool = [...literaturaItems];
+
+  // Literature goes 3x per week (Tue, Thu, Sat = days 2,4,6)
+  const litDays = new Set([2,4,6]); // dayOfWeek: Tue=2, Thu=4, Sat=6
+
+  const pullFerretto = (subject) => {
+    if (ferrettoPools[subject] && ferrettoPools[subject].length > 0) {
+      return { subject, title: ferrettoPools[subject].shift(), done: false, id: uid(), type: 'video' };
+    }
+    let best = null, bestLen = 0;
+    for (const [k, pool] of Object.entries(ferrettoPools)) {
+      if (pool.length > bestLen) { bestLen = pool.length; best = k; }
+    }
+    if (best) return { subject: best, title: ferrettoPools[best].shift(), done: false, id: uid(), type: 'video' };
+    return null;
+  };
+
+  const pullApostila = (count, usedSubjects) => {
+    const tasks = [];
+    for (let i = 0; i < count; i++) {
+      let available = Object.keys(apostilaPools).filter(k => apostilaPools[k].length > 0 && !tasks.map(t=>t.subject).includes(k));
+      if (!available.length) available = Object.keys(apostilaPools).filter(k => apostilaPools[k].length > 0);
+      if (!available.length) break;
+      available.sort((a,b) => apostilaPools[b].length - apostilaPools[a].length);
+      const subj = available[0];
+      tasks.push({ subject: subj, title: apostilaPools[subj].shift(), done: false, id: uid(), type: 'apostila' });
+    }
+    return tasks;
+  };
+
+  const ferrettoBlueprint = {
+    1: ['Biologia','Biologia','Matemática','Matemática','Física','História'],
+    2: ['Biologia','Biologia','Física','História','Filosofia','Matemática'],
+    3: ['Biologia','Biologia','Matemática','Matemática','Física','História'],
+    4: ['Biologia','Biologia','Física','História','Filosofia','Matemática'],
+    5: ['Biologia','Biologia','Matemática','Física','História','Filosofia'],
+    6: ['Biologia','Matemática'],
+    0: []
+  };
+  const apostilasPerDay = { 1:2, 2:1, 3:2, 4:1, 5:2, 6:1, 0:0 };
+
+  const weekDays = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  const startDate = new Date();
+  startDate.setHours(0,0,0,0);
+  const allDays = [];
+
+  for (let i = 1; i <= 120; i++) {
+    const cur = new Date(startDate);
+    cur.setDate(startDate.getDate() + i - 1);
+    const dow = cur.getDay();
+    const isRest = dow === 0;
+    const tasks = [];
+
+    if (!isRest) {
+      if (i <= 60) {
+        (ferrettoBlueprint[dow] || []).forEach(s => {
+          const t = pullFerretto(s);
+          if (t) tasks.push(t);
+        });
+      }
+      tasks.push(...pullApostila(apostilasPerDay[dow] || 0, []));
+
+      // Literature 3x per week
+      if (litDays.has(dow) && litPool.length > 0) {
+        tasks.push({ subject: 'Literatura (URCA)', title: litPool.shift(), done: false, id: uid(), type: 'literatura' });
+      }
+    }
+
+    allDays.push({
+      day: i,
+      dateStr: `${cur.getDate().toString().padStart(2,'0')}/${(cur.getMonth()+1).toString().padStart(2,'0')}`,
+      fullDate: `${cur.getDate()} de ${months[cur.getMonth()]}`,
+      weekDayName: weekDays[dow],
+      isRest,
+      tasks
+    });
+  }
+
+  // Distribute leftover Ferretto tasks
+  let ferrettoLeft = [];
+  for (const [k, pool] of Object.entries(ferrettoPools))
+    pool.forEach(t => ferrettoLeft.push({ subject: k, title: t, done: false, id: uid(), type: 'video' }));
+  if (ferrettoLeft.length) {
+    let d = 59;
+    while (ferrettoLeft.length > 0 && d >= 0) {
+      if (!allDays[d].isRest) allDays[d].tasks.unshift(ferrettoLeft.shift());
+      d--; if (d < 0 && ferrettoLeft.length > 0) d = 59;
+    }
+  }
+
+  // Distribute leftover Apostila
+  let apostilaLeft = [];
+  for (const [k, pool] of Object.entries(apostilaPools))
+    pool.forEach(t => apostilaLeft.push({ subject: k, title: t, done: false, id: uid(), type: 'apostila' }));
+  if (apostilaLeft.length) {
+    let d = 119;
+    while (apostilaLeft.length > 0 && d >= 60) {
+      if (!allDays[d].isRest) allDays[d].tasks.push(apostilaLeft.shift());
+      d--; if (d < 60 && apostilaLeft.length > 0) d = 119;
+    }
+  }
+
+  // Distribute leftover Literatura
+  if (litPool.length) {
+    let d = 119;
+    while (litPool.length > 0 && d >= 0) {
+      if (!allDays[d].isRest) allDays[d].tasks.push({ subject: 'Literatura (URCA)', title: litPool.shift(), done: false, id: uid(), type: 'literatura' });
+      d--; if (d < 0 && litPool.length > 0) d = 119;
+    }
+  }
+
+  return allDays;
+}
+
+// =====================================================================
+// STATE
+// =====================================================================
+const STORE_KEY = 'cronograma_120d_v3';
+const ACTIVE_KEY = 'cronograma_active_v3';
+
+let schedule = (() => {
+  try { const s = localStorage.getItem(STORE_KEY); return s ? JSON.parse(s) : generateSchedule(); }
+  catch { return generateSchedule(); }
+})();
+let activeDay = (() => {
+  try { return parseInt(localStorage.getItem(ACTIVE_KEY)) || 1; }
+  catch { return 1; }
+})();
+let viewMode = 'daily';
+
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(schedule));
+  localStorage.setItem(ACTIVE_KEY, activeDay.toString());
+}
+
+// =====================================================================
+// SUBJECT COLORS
+// =====================================================================
+function getTagStyle(subject) {
+  const s = subject.replace(' (Apostila)', '');
+  const map = {
+    'Matemática': { color: '#818cf8', bg: 'rgba(129,140,248,0.1)', border: 'rgba(129,140,248,0.2)' },
+    'Biologia': { color: '#10b981', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
+    'Física': { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.2)' },
+    'História': { color: '#eab308', bg: 'rgba(234,179,8,0.1)', border: 'rgba(234,179,8,0.2)' },
+    'Filosofia': { color: '#a855f7', bg: 'rgba(168,85,247,0.1)', border: 'rgba(168,85,247,0.2)' },
+    'Química': { color: '#ec4899', bg: 'rgba(236,72,153,0.1)', border: 'rgba(236,72,153,0.2)' },
+    'Português': { color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)', border: 'rgba(139,92,246,0.2)' },
+    'Geografia': { color: '#14b8a6', bg: 'rgba(20,184,166,0.1)', border: 'rgba(20,184,166,0.2)' },
+    'Sociologia': { color: '#f43f5e', bg: 'rgba(244,63,94,0.1)', border: 'rgba(244,63,94,0.2)' },
+    'Ed. Física': { color: '#06b6d4', bg: 'rgba(6,182,212,0.1)', border: 'rgba(6,182,212,0.2)' },
+    'Literatura (URCA)': { color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.25)' }
+  };
+  for (const key of Object.keys(map)) {
+    if (s.includes(key)) return map[key];
+  }
+  return { color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)' };
+}
+
+function typeIcon(type) {
+  if (type === 'video') return '▶ Vídeo';
+  if (type === 'apostila') return '📖 Apostila';
+  if (type === 'literatura') return '📚 Literatura';
+  return type;
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function updateProgress() {
+  const total = schedule.reduce((a, d) => a + d.tasks.length, 0);
+  const done = schedule.reduce((a, d) => a + d.tasks.filter(t => t.done).length, 0);
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('pct-text').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-sub').textContent = `${done} de ${total} tarefas`;
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  schedule.forEach(d => {
+    const isDone = !d.isRest && d.tasks.length > 0 && d.tasks.every(t => t.done);
+    const isSelected = d.day === activeDay;
+    const btn = document.createElement('button');
+    btn.className = 'day-btn' + (isSelected ? ' selected' : '') + (d.isRest ? ' rest' : '') + (isDone && !isSelected ? ' done' : '');
+    btn.innerHTML = `<span class="day-num">D${d.day}</span><span class="day-date">${d.dateStr}</span>${isDone && !isSelected ? '<span class="done-dot"></span>' : ''}`;
+    btn.title = d.isRest ? 'Domingo – Descanso' : d.fullDate;
+    btn.onclick = () => { activeDay = d.day; save(); renderAll(); };
+    grid.appendChild(btn);
+  });
+}
+
+function renderTasks() {
+  const dayData = schedule[activeDay - 1];
+  document.getElementById('day-title').textContent = `Dia ${activeDay}`;
+  const badge = document.getElementById('day-badge');
+  const sub = document.getElementById('day-subtitle');
+  const list = document.getElementById('tasks-list');
+
+  if (dayData.isRest) {
+    badge.textContent = 'Descanso';
+    badge.className = 'day-badge rest';
+    sub.textContent = 'O repouso consolida a memória. Dia livre.';
+    list.innerHTML = `<div class="rest-screen">
+      <div class="rest-icon">☕</div>
+      <h3>Momento de Descompressão</h3>
+      <p>Vá caminhar, ler algo por prazer ou simplesmente descansar. O foco amanhã será melhor por causa de hoje.</p>
+    </div>`;
+    return;
+  }
+
+  badge.textContent = dayData.weekDayName;
+  badge.className = 'day-badge weekday';
+  const pending = dayData.tasks.filter(t => !t.done).length;
+  const allDone = dayData.tasks.length > 0 && pending === 0;
+  sub.textContent = allDone
+    ? '✅ Missão do dia concluída. Excelente trabalho!'
+    : `${pending} tarefa${pending !== 1 ? 's' : ''} aguardando hoje · ${dayData.fullDate}`;
+
+  list.innerHTML = dayData.tasks.map((task, idx) => {
+    const styles = getTagStyle(task.subject);
+    const cleanTitle = task.title.replace('Aula: ','').replace(' (Estudo e Exercícios)','');
+    const cleanSubject = task.subject.replace(' (Apostila)','');
+    return `<div class="task-item${task.done ? ' done' : ''}" data-idx="${idx}">
+      <div class="check${task.done ? ' checked' : ''}">✓</div>
+      <div class="task-info">
+        <div class="task-tags">
+          <span class="tag" style="color:${styles.color};background:${styles.bg};border-color:${styles.border}">${cleanSubject}</span>
+          <span class="tag-type">${typeIcon(task.type)}</span>
+        </div>
+        <div class="task-name">${cleanTitle}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.task-item').forEach(el => {
+    el.onclick = () => {
+      const idx = parseInt(el.dataset.idx);
+      schedule[activeDay - 1].tasks[idx].done = !schedule[activeDay - 1].tasks[idx].done;
+      save(); renderAll();
+    };
+  });
+}
+
+function renderPanoramic() {
+  const subjects = ['Matemática','Física','Biologia','Química','Português','História','Geografia','Filosofia','Sociologia','Ed. Física','Literatura (URCA)'];
+  const grid = document.getElementById('panoramic-grid');
+  grid.innerHTML = '';
+
+  subjects.forEach(base => {
+    const allTasks = [];
+    schedule.forEach((d, di) => {
+      d.tasks.forEach((t, ti) => {
+        if (t.subject.includes(base) || (base === 'Ed. Física' && t.subject.includes('Ed. Física'))) {
+          allTasks.push({ ...t, di, ti, dayNum: d.day });
         }
+      });
+    });
+    if (!allTasks.length) return;
 
-        function generateSchedule() {
-            const allDays = [];
-            
-            // Fazer cópias
-            const poolsFerretto = { 'Matemática': [...mathFerretto], 'Física': [...physFerretto], 'Biologia': [...bioFerretto], 'História': [...histFerretto], 'Filosofia': [...philoFerretto] };
-            
-            // Construir Apostila Pools Dinamicamente para evitar Reference Errors
-            const poolsApostila = {};
-            apostilaTasks.forEach(task => {
-                if(!poolsApostila[task.s]) poolsApostila[task.s] = [];
-                poolsApostila[task.s].push(task.t);
-            });
+    const done = allTasks.filter(t => t.done).length;
+    const styles = getTagStyle(base);
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.innerHTML = `
+      <div class="subject-card-header">
+        <span class="tag" style="color:${styles.color};background:${styles.bg};border-color:${styles.border};font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid">${base}</span>
+        <span class="subj-count">${done} / ${allTasks.length}</span>
+      </div>
+      <div class="subj-scroll">
+        ${allTasks.map((task, i) => {
+          const cleanTitle = task.title.replace('Aula: ','').replace(' (Estudo e Exercícios)','');
+          return `<div class="mini-task${task.done ? ' done' : ''}" data-di="${task.di}" data-ti="${task.ti}">
+            <div class="mini-check${task.done ? ' checked' : ''}">✓</div>
+            <div class="mini-task-info">
+              <div class="mini-name">${cleanTitle}</div>
+              <div class="mini-meta">
+                <span class="mini-tag">Dia ${task.dayNum}</span>
+                <span class="mini-tag" style="color:${task.type === 'literatura' ? '#fb923c' : task.type === 'video' ? '#3b82f6' : '#818cf8'}">· ${typeIcon(task.type)}</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(card);
 
-            const poolUrca = [...urcaTasks];
+    card.querySelectorAll('.mini-task').forEach(el => {
+      el.onclick = () => {
+        const di = parseInt(el.dataset.di), ti = parseInt(el.dataset.ti);
+        schedule[di].tasks[ti].done = !schedule[di].tasks[ti].done;
+        save(); renderAll();
+      };
+    });
+  });
+}
 
-            const pullFerretto = createRoundRobin(poolsFerretto);
-            const pullApostila = createRoundRobin(poolsApostila);
+function renderAll() {
+  updateProgress();
+  if (viewMode === 'daily') { renderCalendar(); renderTasks(); }
+  else renderPanoramic();
+  document.getElementById('btn-prev').disabled = activeDay <= 1;
+  document.getElementById('btn-next').disabled = activeDay >= 120;
+}
 
-            const weekDays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            
-            const startDate = new Date();
-            startDate.setHours(0, 0, 0, 0);
+// =====================================================================
+// VIEW / NAVIGATION
+// =====================================================================
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('view-daily').classList.toggle('hidden', mode !== 'daily');
+  document.getElementById('view-list').classList.toggle('hidden', mode !== 'list');
+  document.getElementById('tab-daily').classList.toggle('active', mode === 'daily');
+  document.getElementById('tab-list').classList.toggle('active', mode === 'list');
+  renderAll();
+}
 
-            // Regras Exatas: Ferretto e Apostila (Seg-Sáb), URCA (Seg, Qua, Sex)
-            const activeUrca = [1, 3, 5]; 
+function navigateDay(dir) {
+  activeDay = Math.max(1, Math.min(120, activeDay + dir));
+  save(); renderAll();
+}
 
-            for (let i = 1; i <= 120; i++) {
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + (i - 1));
-                const dayOfWeek = currentDate.getDay();
-                const isRest = dayOfWeek === 0; 
-                const dayTasks = [];
+// =====================================================================
+// MODAL
+// =====================================================================
+document.getElementById('btn-cancel').onclick = () => document.getElementById('modal').classList.add('hidden');
+document.getElementById('btn-confirm').onclick = () => {
+  schedule = generateSchedule();
+  activeDay = 1;
+  save();
+  document.getElementById('modal').classList.add('hidden');
+  renderAll();
+};
 
-                if (!isRest) {
-                    // Ferretto (2-3 por dia)
-                    const qtdFerretto = (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) ? 2 : 3; 
-                    for(let j=0; j<qtdFerretto; j++) {
-                        const t = pullFerretto();
-                        if(t) dayTasks.push({ id: Math.random().toString(36).substr(2, 9), block: 1, tag: 'Videoaula', subject: t.subject, title: t.title, done: false, icon: 'fa-play' });
-                    }
+// Scroll active day into view in calendar
+function scrollActiveDay() {
+  setTimeout(() => {
+    const grid = document.getElementById('cal-grid');
+    const btns = grid.querySelectorAll('.day-btn');
+    if (btns[activeDay - 1]) btns[activeDay - 1].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, 50);
+}
 
-                    // Apostila (1-2 por dia)
-                    const qtdApo = (dayOfWeek === 2 || dayOfWeek === 4 || dayOfWeek === 6) ? 2 : 1; 
-                    for(let j=0; j<qtdApo; j++) {
-                        const t = pullApostila();
-                        if(t) dayTasks.push({ id: Math.random().toString(36).substr(2, 9), block: 2, tag: 'Apostila', subject: t.subject, title: t.title, done: false, icon: 'fa-book-open' });
-                    }
-
-                    // URCA (1-2 por dia, 3x na semana)
-                    if (activeUrca.includes(dayOfWeek)) {
-                        const qtdLit = (dayOfWeek === 1 || dayOfWeek === 5) ? 2 : 1; 
-                        for(let j=0; j<qtdLit; j++) {
-                            if(poolUrca.length > 0) {
-                                dayTasks.push({ id: Math.random().toString(36).substr(2, 9), block: 3, tag: 'URCA', subject: 'Literatura', title: poolUrca.shift(), done: false, icon: 'fa-pen-nib' });
-                            }
-                        }
-                    }
-                }
-
-                allDays.push({
-                    day: i, dateString: `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`,
-                    fullDateString: `${currentDate.getDate()} de ${months[currentDate.getMonth()]}`,
-                    weekDayName: weekDays[dayOfWeek], isRest: isRest, tasks: dayTasks
-                });
-            }
-
-            // Distribuir sobras finais (Safety Net)
-            let d = 119;
-            while(true) {
-                let added = false;
-                const f = pullFerretto();
-                if(f) { allDays[d].tasks.push({ id: Math.random().toString(36).substr(2, 9), block: 1, tag: 'Videoaula', subject: f.subject, title: f.title, done: false, icon: 'fa-play' }); added=true; }
-                
-                const a = pullApostila();
-                if(a) { allDays[d].tasks.push({ id: Math.random().toString(36).substr(2, 9), block: 2, tag: 'Apostila', subject: a.subject, title: a.title, done: false, icon: 'fa-book-open' }); added=true; }
-                
-                if(activeUrca.includes(new Date(startDate.getTime() + (d * 86400000)).getDay()) && poolUrca.length > 0) {
-                    allDays[d].tasks.push({ id: Math.random().toString(36).substr(2, 9), block: 3, tag: 'URCA', subject: 'Literatura', title: poolUrca.shift(), done: false, icon: 'fa-pen-nib' }); added=true;
-                }
-
-                if(!added && poolUrca.length===0) break;
-                d--; if (d < 0) d = 119;
-            }
-
-            allDays.forEach(day => { day.tasks.sort((a, b) => a.block - b.block); });
-            return allDays;
-        }
-
-        // ==========================================
-        // 3. ESTADO & CORES
-        // ==========================================
-        let appState = {
-            schedule: JSON.parse(localStorage.getItem('min_pro_data_v2')) || generateSchedule(),
-            activeDay: parseInt(localStorage.getItem('min_pro_day_v2')) || 1,
-            view: 'daily'
-        };
-
-        function saveState() {
-            localStorage.setItem('min_pro_data_v2', JSON.stringify(appState.schedule));
-            localStorage.setItem('min_pro_day_v2', appState.activeDay.toString());
-        }
-
-        function getSubjectColor(subject) {
-            if(!subject) return 'text-zinc-400 bg-zinc-800 border-zinc-700';
-            if(subject.includes('Matemática')) return 'text-blue-400 bg-blue-500/10 border-blue-500/20';
-            if(subject.includes('Biologia')) return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
-            if(subject.includes('Física') && !subject.includes('Ed. Física')) return 'text-amber-400 bg-amber-500/10 border-amber-500/20';
-            if(subject.includes('História')) return 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20';
-            if(subject.includes('Filosofia') || subject.includes('Socio')) return 'text-purple-400 bg-purple-500/10 border-purple-500/20';
-            if(subject.includes('Química')) return 'text-pink-400 bg-pink-500/10 border-pink-500/20';
-            if(subject.includes('Português') || subject.includes('Literatura')) return 'text-rose-400 bg-rose-500/10 border-rose-500/20';
-            if(subject.includes('Geografia')) return 'text-teal-400 bg-teal-500/10 border-teal-500/20';
-            if(subject.includes('Ed. Física')) return 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20';
-            return 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20';
-        }
-
-        // ==========================================
-        // 4. RENDERS & TARGETED DOM UPDATES
-        // ==========================================
-        function renderHeader() {
-            const total = appState.schedule.reduce((acc, d) => acc + d.tasks.length, 0);
-            const completed = appState.schedule.reduce((acc, d) => acc + d.tasks.filter(t => t.done).length, 0);
-            const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-            document.getElementById('dashboard-header').innerHTML = `
-                <div class="glass-panel rounded-2xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <h1 class="text-3xl font-semibold text-white tracking-tight">Estratégia <span class="text-zinc-400 font-normal">120 Dias</span></h1>
-                        </div>
-                        <p class="text-textMuted text-sm">Progresso uniforme: Básicas (Seg-Sáb) • Literatura URCA (Seg, Qua, Sex)</p>
-                    </div>
-                    <div class="flex items-center gap-5 bg-zinc-900/50 p-4 rounded-xl border border-border min-w-[240px]">
-                        <div class="flex-1">
-                            <div class="text-[10px] font-semibold text-zinc-500 uppercase tracking-widest mb-1">Taxa de Sucesso</div>
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-2xl font-bold text-white">${pct}%</span>
-                                <span class="text-xs text-zinc-500">${completed}/${total}</span>
-                            </div>
-                        </div>
-                        <div class="w-12 h-12 rounded-full border-4 border-zinc-800 flex items-center justify-center relative">
-                            <svg class="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <circle class="text-white stroke-current" stroke-width="8" stroke-linecap="round" fill="transparent" cx="50" cy="50" r="46" style="stroke-dasharray: 289; stroke-dashoffset: ${289 - (pct/100)*289}; transition: stroke-dashoffset 1s ease-out;"></circle>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function getDailyTaskHTML(dIdx, tIdx, task) {
-            return `
-                <div id="task-${dIdx}-${tIdx}" onclick="toggleTask(${dIdx}, ${tIdx})" class="task-row p-4 rounded-xl border border-border bg-surface/50 flex items-start gap-4 cursor-pointer select-none mb-3 ${task.done ? 'done' : ''}">
-                    <div class="task-checkbox mt-0.5 w-5 h-5 rounded border flex items-center justify-center shrink-0 ${task.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-zinc-600 bg-transparent'}">
-                        ${task.done ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                            <span class="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded border ${getSubjectColor(task.subject)}">
-                                ${task.subject}
-                            </span>
-                            <span class="text-[9px] font-semibold text-zinc-400 px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 uppercase">
-                                <i class="fa-solid ${task.icon} mr-1"></i> ${task.tag}
-                            </span>
-                        </div>
-                        <h4 class="text-sm font-medium text-zinc-200 task-title leading-relaxed">
-                            ${task.title}
-                        </h4>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderDailyView() {
-            const current = appState.schedule[appState.activeDay - 1];
-            const isCompleted = current && current.tasks.length > 0 && current.tasks.every(t => t.done);
-
-            const calendarGrid = appState.schedule.map(d => {
-                const isActive = appState.activeDay === d.day;
-                const isDone = !d.isRest && d.tasks.every(t => t.done);
-                let classes = "border rounded-xl py-3 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 select-none ";
-                
-                if(isActive) classes += "bg-white text-black border-white shadow-md z-10";
-                else if(d.isRest) classes += "bg-transparent border-transparent text-zinc-600 opacity-60 hover:opacity-100 hover:bg-zinc-900";
-                else if(isDone) classes += "bg-emerald-950/30 border-emerald-900/50 text-emerald-500 hover:bg-emerald-900/20";
-                else classes += "bg-surface border-border text-zinc-400 hover:border-zinc-500 hover:text-zinc-200";
-
-                return `
-                    <div id="cal-day-${d.day}" onclick="changeDay(${d.day})" class="${classes}" title="${d.isRest ? 'Domingo' : d.fullDateString}">
-                        <span class="text-[9px] uppercase font-bold tracking-wider mb-0.5 opacity-60">D${d.day}</span>
-                        <span class="text-xs font-semibold">${d.dateString}</span>
-                    </div>
-                `;
-            }).join('');
-
-            let tasksList = '';
-            if (current.isRest) {
-                tasksList = `
-                    <div class="flex flex-col items-center justify-center h-full py-16 text-center select-none animate-fade">
-                        <i class="fa-solid fa-mug-hot text-4xl text-zinc-600 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-white mb-2">Domingo Livre</h3>
-                        <p class="text-textMuted text-sm max-w-sm">O cronograma foca o esforço de Segunda a Sábado. Usa o Domingo para descanso total.</p>
-                    </div>
-                `;
-            } else {
-                tasksList = current.tasks.map((task, idx) => getDailyTaskHTML(appState.activeDay - 1, idx, task)).join('');
-            }
-
-            return `
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade">
-                    <div class="lg:col-span-4 glass-panel rounded-2xl p-5 h-[680px] flex flex-col">
-                        <h3 class="text-xs font-semibold text-zinc-500 mb-4 uppercase tracking-[0.15em] flex items-center justify-center gap-2 select-none">
-                            Calendário 120D
-                        </h3>
-                        <div id="calendar-container" class="grid grid-cols-4 gap-2 overflow-y-auto pr-2 custom-scroll flex-1 pb-4">
-                            ${calendarGrid}
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-8 glass-panel rounded-2xl p-6 md:p-8 h-[680px] flex flex-col">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-6 border-b border-border select-none">
-                            <div>
-                                <h2 class="text-3xl font-semibold text-white flex items-center gap-3 mb-1">
-                                    Dia ${appState.activeDay}
-                                    <span class="text-xs font-medium bg-zinc-800 text-zinc-300 px-3 py-1 rounded-md border border-zinc-700">
-                                        ${current.weekDayName}
-                                    </span>
-                                </h2>
-                                <p id="daily-counter" class="text-textMuted text-sm mt-1">
-                                    ${current.isRest ? 'Dia 100% Livre.' : (isCompleted ? '<span class="text-emerald-500">Todas as missões concluídas!</span>' : `Restam <span class="text-white">${current.tasks.filter(t=>!t.done).length}</span> tópicos para hoje.`)}
-                                </p>
-                            </div>
-                            <div class="flex gap-2 mt-4 sm:mt-0">
-                                <button onclick="changeDay(${appState.activeDay - 1})" class="w-10 h-10 flex items-center justify-center bg-surface border border-border hover:bg-zinc-800 text-zinc-300 rounded-lg transition-colors disabled:opacity-30 cursor-pointer" ${appState.activeDay === 1 ? 'disabled' : ''}>
-                                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                                </button>
-                                <button onclick="changeDay(${appState.activeDay + 1})" class="w-10 h-10 flex items-center justify-center bg-surface border border-border hover:bg-zinc-800 text-zinc-300 rounded-lg transition-colors disabled:opacity-30 cursor-pointer" ${appState.activeDay === 120 ? 'disabled' : ''}>
-                                    <i class="fa-solid fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="tasks-container" class="flex-1 overflow-y-auto pr-3 custom-scroll pb-6">
-                            ${tasksList}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function getOverviewTaskHTML(dIdx, tIdx, task) {
-            return `
-                <div id="ov-task-${dIdx}-${tIdx}" onclick="toggleTask(${dIdx}, ${tIdx})" class="text-sm p-3 rounded-lg border border-border bg-surface/30 flex items-start gap-3 cursor-pointer select-none transition-colors task-row ${task.done ? 'done' : 'hover:border-zinc-600 hover:bg-zinc-800/50'}">
-                    <div class="mt-0.5 w-4 h-4 rounded border flex items-center justify-center shrink-0 task-checkbox ${task.done ? 'bg-emerald-500 border-emerald-500' : 'border-zinc-600 bg-transparent'}">
-                        ${task.done ? '<i class="fa-solid fa-check text-[9px] text-white"></i>' : ''}
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-1 flex items-center gap-2">
-                            <span class="bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">D${task.day}</span>
-                            ${task.subject}
-                        </div>
-                        <span class="block text-zinc-300 font-medium task-title">${task.title}</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function buildOverview() {
-            const categories = [
-                { id: 'Videoaula', label: 'Videoaulas', icon: 'fa-play' },
-                { id: 'Apostila', label: 'Apostila Base', icon: 'fa-book-open' },
-                { id: 'URCA', label: 'Literatura URCA', icon: 'fa-pen-nib' }
-            ];
-            
-            let html = categories.map(cat => {
-                const catTasks = [];
-                appState.schedule.forEach((d, dIdx) => d.tasks.forEach((t, tIdx) => { 
-                    if(t.tag === cat.id) { t.day = d.day; catTasks.push({ task: t, dIdx, tIdx }); }
-                }));
-                
-                if(catTasks.length === 0) return '';
-                const done = catTasks.filter(item=>item.task.done).length;
-                let items = catTasks.map(item => getOverviewTaskHTML(item.dIdx, item.tIdx, item.task)).join('');
-
-                return `
-                    <div class="glass-panel rounded-2xl p-6 flex flex-col h-[550px]">
-                        <div class="flex justify-between items-center mb-5 pb-4 border-b border-border select-none">
-                            <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                                <i class="fa-solid ${cat.icon} text-zinc-400"></i> ${cat.label}
-                            </h3>
-                            <span id="ov-count-${cat.id.replace(/\s+/g, '-')}" class="text-xs font-medium text-zinc-400">
-                                ${done} / ${catTasks.length}
-                            </span>
-                        </div>
-                        <div class="flex-1 overflow-y-auto pr-2 custom-scroll space-y-2 pb-4">
-                            ${items}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            return `
-                <div class="animate-fade">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        ${html}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderApp() {
-            renderHeader();
-            const main = document.getElementById('app-content');
-            if (appState.view === 'daily') main.innerHTML = renderDailyView();
-            else main.innerHTML = buildOverview();
-        }
-
-        // --- AÇÕES UI E TARGETED UPDATES ---
-        window.switchView = function(view) {
-            if(appState.view === view) return;
-            appState.view = view;
-            
-            const btnDaily = document.getElementById('tab-daily');
-            const btnList = document.getElementById('tab-overview');
-            
-            if(view === 'daily') {
-                btnDaily.className = "flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none bg-white text-black shadow-sm";
-                btnList.className = "flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none text-textMuted hover:text-white hover:bg-zinc-800/50";
-            } else {
-                btnList.className = "flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none bg-white text-black shadow-sm";
-                btnDaily.className = "flex-1 sm:flex-none px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none text-textMuted hover:text-white hover:bg-zinc-800/50";
-            }
-            renderApp();
-        }
-
-        window.changeDay = function(d) {
-            if(d >= 1 && d <= 120 && d !== appState.activeDay) {
-                appState.activeDay = d;
-                saveState();
-                renderApp();
-            }
-        }
-
-        window.toggleTask = function(dIdx, tIdx) {
-            const task = appState.schedule[dIdx].tasks[tIdx];
-            task.done = !task.done;
-            saveState();
-            
-            renderHeader(); // Atualiza barra global
-            
-            // Targeted DOM Update (Atualiza apenas o elemento clicado)
-            if (appState.view === 'daily') {
-                const taskEl = document.getElementById(`task-${dIdx}-${tIdx}`);
-                if (taskEl) taskEl.outerHTML = getDailyTaskHTML(dIdx, tIdx, task);
-                
-                // Atualiza contadores locais do Dia
-                const current = appState.schedule[dIdx];
-                const isCompleted = current.tasks.length > 0 && current.tasks.every(t => t.done);
-                document.getElementById('daily-counter').innerHTML = isCompleted ? '<span class="text-emerald-500">Todas as missões concluídas!</span>' : `Restam <span class="text-white">${current.tasks.filter(t=>!t.done).length}</span> tópicos para hoje.`;
-                
-                // Refresca a cor do botão do calendário
-                const calBtn = document.getElementById(`cal-day-${current.day}`);
-                if(calBtn) {
-                    const isActive = appState.activeDay === current.day;
-                    let classes = "border rounded-xl py-3 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 select-none ";
-                    if(isActive) classes += "bg-white text-black border-white shadow-md z-10";
-                    else if(current.isRest) classes += "bg-transparent border-transparent text-zinc-600 opacity-60";
-                    else if(isCompleted) classes += "bg-emerald-950/30 border-emerald-900/50 text-emerald-500";
-                    else classes += "bg-surface border-border text-zinc-400";
-                    
-                    calBtn.className = classes;
-                }
-            } else {
-                const taskEl = document.getElementById(`ov-task-${dIdx}-${tIdx}`);
-                if (taskEl) {
-                    task.day = appState.schedule[dIdx].day;
-                    taskEl.outerHTML = getOverviewTaskHTML(dIdx, tIdx, task);
-                }
-                
-                // Atualizar contadores na visão geral
-                ['Videoaula', 'Apostila', 'URCA'].forEach(catId => {
-                    let total=0; let done=0;
-                    appState.schedule.forEach(d => d.tasks.forEach(t => { if(t.tag === catId) { total++; if(t.done) done++; }}));
-                    const countEl = document.getElementById(`ov-count-${catId.replace(/\s+/g, '-')}`);
-                    if(countEl) countEl.innerHTML = `${done} / ${total}`;
-                });
-            }
-        }
-
-        // Modais
-        window.openModal = function() {
-            const m = document.getElementById('modalReset');
-            const c = document.getElementById('modalContent');
-            m.classList.remove('opacity-0', 'pointer-events-none');
-            c.classList.remove('scale-95');
-        }
-
-        window.closeModal = function() {
-            const m = document.getElementById('modalReset');
-            const c = document.getElementById('modalContent');
-            c.classList.add('scale-95');
-            m.classList.add('opacity-0');
-            setTimeout(() => m.classList.add('pointer-events-none'), 300);
-        }
-
-        window.executeReset = function() {
-            appState.schedule = generateSchedule();
-            appState.activeDay = 1;
-            saveState();
-            closeModal();
-            renderApp();
-        }
-
-        // --- INICIAR APP ---
-        renderApp();
-    </script>
+// =====================================================================
+// INIT
+// =====================================================================
+renderAll();
+scrollActiveDay();
+</script>
 </body>
 </html>
