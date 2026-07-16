@@ -1,1107 +1,1290 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projeto Aprovação – 120 Dias</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #060a12;
-    --bg2: #0d1420;
-    --bg3: #111827;
-    --bg4: #1a2334;
-    --border: rgba(255,255,255,0.06);
-    --border2: rgba(255,255,255,0.10);
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --muted2: #64748b;
-    --blue: #3b82f6;
-    --blue-dim: rgba(59,130,246,0.12);
-    --indigo: #818cf8;
-    --indigo-dim: rgba(129,140,248,0.12);
-    --emerald: #10b981;
-    --emerald-dim: rgba(16,185,129,0.12);
-    --amber: #f59e0b;
-    --amber-dim: rgba(245,158,11,0.12);
-    --rose: #f43f5e;
-    --rose-dim: rgba(244,63,94,0.12);
-    --purple: #a855f7;
-    --purple-dim: rgba(168,85,247,0.12);
-    --pink: #ec4899;
-    --pink-dim: rgba(236,72,153,0.12);
-    --teal: #14b8a6;
-    --teal-dim: rgba(20,184,166,0.12);
-    --cyan: #06b6d4;
-    --cyan-dim: rgba(6,182,212,0.12);
-    --yellow: #eab308;
-    --yellow-dim: rgba(234,179,8,0.12);
-    --radius: 14px;
-    --radius-sm: 8px;
-    --radius-lg: 20px;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif;
-    min-height: 100vh;
-    line-height: 1.5;
-    padding: 0;
-  }
-
-  .grain {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.5;
-  }
-
-  .glow-bg {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59,130,246,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 30% at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 60%);
-  }
-
-  .container {
-    position: relative; z-index: 1;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 20px;
-  }
-
-  /* HEADER */
-  .header {
-    display: flex; flex-wrap: wrap;
-    align-items: center; justify-content: space-between;
-    gap: 20px;
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    margin-bottom: 24px;
-  }
-
-  .header-left h1 {
-    font-size: 28px; font-weight: 900;
-    letter-spacing: -0.03em;
-    color: var(--text);
-    line-height: 1.1;
-  }
-
-  .header-left h1 .accent { color: var(--blue); }
-  .header-left p { font-size: 13px; color: var(--muted); margin-top: 6px; }
-
-  .badge {
-    display: inline-flex; align-items: center;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 100px;
-    background: var(--blue-dim); color: var(--blue);
-    border: 1px solid rgba(59,130,246,0.2);
-    margin-left: 12px; vertical-align: middle;
-  }
-
-  .progress-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 22px;
-    min-width: 280px;
-  }
-
-  .progress-label {
-    display: flex; justify-content: space-between;
-    font-size: 12px; font-weight: 600; margin-bottom: 10px;
-    color: var(--muted);
-  }
-
-  .progress-label .pct { color: var(--blue); }
-
-  .progress-bar {
-    height: 6px; background: var(--bg4);
-    border-radius: 100px; overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%; border-radius: 100px;
-    background: var(--blue);
-    transition: width 0.5s ease;
-  }
-
-  .progress-sub {
-    font-size: 11px; color: var(--muted2);
-    margin-top: 8px; text-align: right;
-  }
-
-  /* NAV */
-  .nav {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
-  }
-
-  .tabs {
-    display: flex; background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 5px; gap: 4px;
-  }
-
-  .tab {
-    display: flex; align-items: center; gap-7px;
-    padding: 8px 18px; border-radius: 10px;
-    font-size: 13px; font-weight: 600;
-    color: var(--muted); cursor: pointer;
-    border: none; background: transparent;
-    transition: all 0.2s;
-    gap: 6px;
-  }
-
-  .tab:hover { color: var(--text); background: var(--bg3); }
-
-  .tab.active {
-    background: var(--bg4); color: var(--text);
-    box-shadow: inset 0 0 0 1px var(--border2);
-  }
-
-  .tab-icon { font-size: 14px; }
-
-  .btn-reset {
-    display: flex; align-items: center; gap: 6px;
-    padding: 9px 16px; border-radius: var(--radius-sm);
-    font-size: 12px; font-weight: 700;
-    color: var(--muted); background: var(--bg2);
-    border: 1px solid var(--border);
-    cursor: pointer; transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .btn-reset:hover { color: var(--rose); border-color: rgba(244,63,94,0.3); }
-
-  /* MAIN GRID */
-  .main-grid {
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 20px;
-    align-items: start;
-  }
-
-  @media (max-width: 960px) {
-    .main-grid { grid-template-columns: 1fr; }
-  }
-
-  /* CALENDAR PANEL */
-  .panel {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 22px;
-    height: 680px;
-    display: flex; flex-direction: column;
-  }
-
-  .panel-title {
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--muted2); margin-bottom: 16px;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    overflow-y: auto;
-    padding-right: 4px;
-    flex: 1;
-  }
-
-  .cal-grid::-webkit-scrollbar { width: 4px; }
-  .cal-grid::-webkit-scrollbar-track { background: transparent; }
-  .cal-grid::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
-
-  .day-btn {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 8px 4px; border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--bg3); cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Inter', sans-serif;
-    position: relative;
-  }
-
-  .day-btn:hover { border-color: var(--border2); background: var(--bg4); }
-
-  .day-btn.selected {
-    background: var(--blue); border-color: var(--blue);
-    box-shadow: 0 0 16px rgba(59,130,246,0.25);
-  }
-
-  .day-btn.done {
-    background: rgba(16,185,129,0.08);
-    border-color: rgba(16,185,129,0.2);
-  }
-
-  .day-btn.rest {
-    background: transparent; border-color: rgba(255,255,255,0.03);
-  }
-
-  .day-num {
-    font-size: 9px; font-weight: 700; text-transform: uppercase;
-    color: var(--muted2); margin-bottom: 2px; letter-spacing: 0.05em;
-  }
-
-  .day-btn.selected .day-num { color: rgba(255,255,255,0.7); }
-
-  .day-date {
-    font-size: 11px; font-weight: 600; color: var(--muted);
-  }
-
-  .day-btn.selected .day-date { color: #fff; }
-  .day-btn.done .day-date { color: var(--emerald); }
-  .day-btn.rest .day-date { color: var(--muted2); opacity: 0.5; }
-
-  .done-dot {
-    position: absolute; top: 5px; right: 5px;
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--emerald);
-    box-shadow: 0 0 5px var(--emerald);
-  }
-
-  /* TASKS PANEL */
-  .tasks-panel {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    height: 680px;
-    display: flex; flex-direction: column;
-    position: relative; overflow: hidden;
-  }
-
-  .tasks-panel::before {
-    content: ''; position: absolute;
-    top: -80px; right: -80px;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .day-header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding-bottom: 22px; margin-bottom: 22px;
-    border-bottom: 1px solid var(--border);
-    position: relative; z-index: 1; flex-shrink: 0;
-  }
-
-  .day-title {
-    font-size: 36px; font-weight: 900;
-    letter-spacing: -0.03em; color: var(--text);
-    line-height: 1;
-  }
-
-  .day-subtitle { font-size: 13px; color: var(--muted); margin-top: 8px; }
-
-  .day-badge {
-    display: inline-flex; align-items: center;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 4px 10px;
-    border-radius: 100px; margin-left: 12px; vertical-align: middle;
-  }
-
-  .day-badge.weekday {
-    background: var(--indigo-dim); color: var(--indigo);
-    border: 1px solid rgba(129,140,248,0.2);
-  }
-
-  .day-badge.rest {
-    background: var(--bg3); color: var(--muted2);
-    border: 1px solid var(--border);
-  }
-
-  .nav-arrows { display: flex; gap: 8px; }
-
-  .arrow-btn {
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); cursor: pointer;
-    color: var(--muted); font-size: 16px;
-    transition: all 0.2s;
-  }
-
-  .arrow-btn:hover { color: var(--text); border-color: var(--border2); }
-  .arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  .tasks-list {
-    flex: 1; overflow-y: auto;
-    padding-right: 6px;
-    position: relative; z-index: 1;
-  }
-
-  .tasks-list::-webkit-scrollbar { width: 4px; }
-  .tasks-list::-webkit-scrollbar-track { background: transparent; }
-  .tasks-list::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
-
-  .task-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 16px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .task-item:hover { border-color: var(--border2); background: var(--bg4); transform: translateX(2px); }
-  .task-item.done { opacity: 0.55; background: rgba(16,185,129,0.04); border-color: rgba(16,185,129,0.12); }
-
-  .check {
-    width: 26px; height: 26px; border-radius: 50%;
-    border: 2px solid var(--bg4);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.2s;
-    color: transparent; font-size: 12px;
-  }
-
-  .task-item:hover .check:not(.checked) { border-color: var(--blue); }
-
-  .check.checked {
-    background: var(--emerald); border-color: var(--emerald);
-    color: #fff; box-shadow: 0 0 8px rgba(16,185,129,0.4);
-  }
-
-  .task-info { flex: 1; min-width: 0; }
-
-  .task-tags { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
-
-  .tag {
-    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 3px 8px;
-    border-radius: 100px; border: 1px solid;
-  }
-
-  .tag-type {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 3px 8px;
-    border-radius: 100px;
-    background: var(--bg4); color: var(--muted2);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; gap: 4px;
-  }
-
-  .task-name {
-    font-size: 14px; font-weight: 500;
-    color: var(--text); line-height: 1.4;
-  }
-
-  .task-item.done .task-name {
-    text-decoration: line-through; color: var(--muted2);
-  }
-
-  /* REST SCREEN */
-  .rest-screen {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; padding: 32px;
-  }
-
-  .rest-icon {
-    width: 80px; height: 80px; border-radius: 50%;
-    background: var(--bg3); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px; margin-bottom: 20px;
-  }
-
-  .rest-screen h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-  .rest-screen p { font-size: 13px; color: var(--muted); max-width: 300px; line-height: 1.6; }
-
-  /* PANORAMIC VIEW */
-  .panoramic {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-  }
-
-  .panoramic-header {
-    display: flex; align-items: center; gap: 12px;
-    padding-bottom: 22px; margin-bottom: 26px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .panoramic-header h2 {
-    font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
-  }
-
-  .panoramic-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-  }
-
-  .subject-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-    transition: border-color 0.2s;
-  }
-
-  .subject-card:hover { border-color: var(--border2); }
-
-  .subject-card-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 14px; margin-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .subj-count {
-    font-size: 11px; font-weight: 700; color: var(--muted2);
-    background: var(--bg4); padding: 4px 10px;
-    border-radius: 100px; border: 1px solid var(--border);
-  }
-
-  .mini-task {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 10px 12px; border-radius: 8px;
-    cursor: pointer; transition: all 0.15s;
-    margin-bottom: 5px;
-    border: 1px solid transparent;
-  }
-
-  .mini-task:hover { background: var(--bg4); border-color: var(--border); }
-  .mini-task.done { opacity: 0.45; }
-
-  .mini-check {
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 1.5px solid var(--muted2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px; transition: all 0.15s; font-size: 9px;
-    color: transparent;
-  }
-
-  .mini-check.checked {
-    background: var(--emerald); border-color: var(--emerald); color: #fff;
-  }
-
-  .mini-task-info .mini-name {
-    font-size: 12px; font-weight: 500; color: var(--text);
-    line-height: 1.4; margin-bottom: 3px;
-  }
-
-  .mini-task.done .mini-name { text-decoration: line-through; color: var(--muted2); }
-
-  .mini-meta { display: flex; gap: 6px; }
-
-  .mini-tag {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
-    color: var(--muted2); text-transform: uppercase;
-  }
-
-  .subj-scroll {
-    max-height: 280px; overflow-y: auto; padding-right: 4px;
-  }
-
-  .subj-scroll::-webkit-scrollbar { width: 3px; }
-  .subj-scroll::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
-
-  /* MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; z-index: 100;
-    background: rgba(6,10,18,0.85);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px; backdrop-filter: blur(4px);
-  }
-
-  .modal {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-lg);
-    padding: 36px;
-    max-width: 420px; width: 100%;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-  }
-
-  .modal-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: var(--rose-dim); border: 1px solid rgba(244,63,94,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; margin-bottom: 20px;
-  }
-
-  .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
-
-  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
-
-  .btn-cancel {
-    padding: 9px 18px; border-radius: 10px;
-    font-size: 13px; font-weight: 600; cursor: pointer;
-    background: transparent; border: 1px solid var(--border);
-    color: var(--muted); transition: all 0.2s;
-  }
-
-  .btn-cancel:hover { color: var(--text); border-color: var(--border2); }
-
-  .btn-confirm {
-    padding: 9px 18px; border-radius: 10px;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    background: var(--rose); border: none;
-    color: #fff; transition: all 0.2s;
-    box-shadow: 0 0 20px rgba(244,63,94,0.3);
-  }
-
-  .btn-confirm:hover { opacity: 0.9; }
-
-  /* ICON DOT */
-  .icon-dot {
-    width: 32px; height: 32px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-  }
-
-  /* Hidden */
-  .hidden { display: none !important; }
-</style>
-</head>
-<body>
-<div class="grain"></div>
-<div class="glow-bg"></div>
-
-<!-- MODAL -->
-<div class="modal-overlay hidden" id="modal">
-  <div class="modal">
-    <div class="modal-icon">⚠️</div>
-    <h3>Reiniciar Jornada?</h3>
-    <p>Todo o progresso será apagado e o cronograma recalculado a partir de hoje. Essa ação não pode ser desfeita.</p>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="btn-cancel">Cancelar</button>
-      <button class="btn-confirm" id="btn-confirm">Resetar Agora</button>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-left">
-      <h1>Projeto <span class="accent">Aprovação</span> <span class="badge">120 Dias</span></h1>
-      <p>Aulas Ferretto · Apostila · Literatura URCA — tudo em um único plano.</p>
-    </div>
-    <div class="progress-card">
-      <div class="progress-label">
-        <span>Progresso global</span>
-        <span class="pct" id="pct-text">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
-      <div class="progress-sub" id="progress-sub">0 de 0 tarefas</div>
-    </div>
-  </header>
-
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="tabs">
-      <button class="tab active" id="tab-daily" onclick="setView('daily')">
-        <span class="tab-icon">⚡</span> Hoje
-      </button>
-      <button class="tab" id="tab-list" onclick="setView('list')">
-        <span class="tab-icon">🧩</span> Matérias
-      </button>
-    </div>
-    <button class="btn-reset" onclick="document.getElementById('modal').classList.remove('hidden')">
-      ↺ Recomeçar
-    </button>
-  </nav>
-
-  <!-- DAILY VIEW -->
-  <div id="view-daily">
-    <div class="main-grid">
-      <!-- Calendar -->
-      <div class="panel">
-        <div class="panel-title">📅 Visão Diária</div>
-        <div class="cal-grid" id="cal-grid"></div>
-      </div>
-      <!-- Tasks -->
-      <div class="tasks-panel">
-        <div class="day-header">
-          <div>
-            <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap">
-              <div class="day-title" id="day-title">Dia 1</div>
-              <span class="day-badge weekday" id="day-badge">Segunda-feira</span>
-            </div>
-            <div class="day-subtitle" id="day-subtitle">Carregando tarefas...</div>
-          </div>
-          <div class="nav-arrows">
-            <button class="arrow-btn" id="btn-prev" onclick="navigateDay(-1)">‹</button>
-            <button class="arrow-btn" id="btn-next" onclick="navigateDay(1)">›</button>
-          </div>
-        </div>
-        <div class="tasks-list" id="tasks-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PANORAMIC VIEW -->
-  <div id="view-list" class="hidden">
-    <div class="panoramic">
-      <div class="panoramic-header">
-        <div class="icon-dot" style="background:var(--indigo-dim);color:var(--indigo)">🎯</div>
-        <h2>Visão Panorâmica</h2>
-      </div>
-      <div class="panoramic-grid" id="panoramic-grid"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-// =====================================================================
-// DATA: FERRETTO
-// =====================================================================
-const mathTasks = [
-  "Probabilidade – Conceitos iniciais","Probabilidade – Definição","Probabilidade – Propriedades","Probabilidade da união","Probabilidade da intersecção","Questões de probabilidade 1","Probabilidade condicional","Lei binomial da probabilidade","Questões de probabilidade 2","Probabilidade (Questões)","Revisão – Probabilidade",
-  "Princípio fundamental da contagem (PFC) – Parte 1","Princípio fundamental da contagem (PFC) – Parte 2","Princípio fundamental da contagem (PFC) – Parte 3","Princípio fundamental da contagem (PFC) – Parte 4","Questões de PFC","Fatorial de um número natural","Permutação simples – Parte 1","Permutação simples – Parte 2","Permutação com repetição","Combinação – Parte 1","Combinação – Parte 2","Arranjos","Questões de permutação e combinação","Análise Combinatória (Questões)","Permutação Circular (Aprofundamento)","Soluções Inteiras e Não Negativas de Equação Linear (Aprofundamento)","Combinação com Repetição (Aprofundamento)","Princípio das Gavetas de Dirichlet (Aprofundamento)","Super Aula de PFC (Aprofundamento)","Super Aula de Permutação (Aprofundamento)","Super Aula de Combinação (Aprofundamento)","Revisão – Análise Combinatória","Simulado Matemática",
-  "Equação reduzida da circunferência","Equação geral da circunferência – Parte 1","Equação geral da circunferência – Parte 2","Posições relativas entre ponto e circunferência","Posição relativa entre reta e circunferência – Parte 1","Posição relativa entre reta e circunferência – Parte 2","Interseção de circunferências","Questões de circunferência","Circunferência (Questões)"
-];
-const bioTasks = [
-  "Doenças causadas por ribovírus: Raiva ou hidrofobia","Doenças causadas por ribovírus: Febre hemorrágica do ebola","Doenças causadas por ribovírus: Caxumba, sarampo e rubéola","Doenças causadas por ribovírus: Poliomielite e rotavirose","Doenças causadas por ribovírus: Hepatites virais","Doenças Causadas por Ribovírus (Questões)","Doenças causadas por desoxivírus e retrovírus: Varíola e Mpox","Doenças causadas por desoxivírus e retrovírus: Herpes simples e catapora/Herpes zoster","Doenças causadas por desoxivírus e retrovírus: HPV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Estrutura, transmissão e ciclo do HIV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Terapia ARV","Doenças causadas por desoxivírus e retrovírus: HIV/AIDS: Fases da infecção e prevenção","Doenças Causadas por Desoxivírus e Retrovírus (Questões)","Bactérias: Reino monera, eubactérias e arqueobactérias","Bactérias: Célula bacteriana","Bactérias: Parede celular bacteriana","Bactérias: Reprodução e recombinação gênica em bactérias","Bactérias: Morfologia das bactérias","Bactérias (Questões)","Doenças causadas por bactérias: Por vibriões: Cólera","Doenças causadas por bactérias: Por espiroquetas: Leptospirose e sífilis","Doenças causadas por bactérias: Por cocos: Gonorreia, meningite e pneumonia","Doenças causadas por bactérias: Por Cocos: Infecções por streptococcus e staphylococcus","Doenças causadas por bactérias: Rickettsia, chlamydia e mycoplasma","Doenças Bacterianas (Questões)","Protozoários e doenças: Reino Protista, protozoários e algas","Protozoários e doenças: Trypanosoma cruzi","Protozoários e doenças: Leishmania sp e giardia lamblia","Protozoários e doenças: Protozoários ciliados e rizópodes","Protozoários e doenças: Toxoplasma gondii","Protozoários e doenças: Malária","Protozoários e Doenças Protozoóticas (Questões)","Algas: Características gerais e importância","Algas: Classificação","Algas: Ciclos de vida","Algas (Questões)","Fungos: Características gerais","Fungos: Importância","Fungos: Micoses","Fungos: Reprodução","Fungos: Classificação","Fungos (Questões)",
-  "Introdução à ecologia: Definição e campo de estudo","Introdução à ecologia: Comunidades nos ecossistemas","Introdução à ecologia: Hábitat e nicho ecológico","Introdução à ecologia: Cadeias e teias alimentares","Introdução à Ecologia (Questões)","Fluxo de energia e 2ª lei da termodinâmica","Fluxo de energia: Produtividade líquida, bruta e taxa de respiração","Fluxo de energia: Produtividade nas cadeias alimentares","Fluxo de energia: Produtividade e alimentação humana","Fluxo de energia: Pirâmides ecológicas","Fluxo de Energia (Questões)","Ciclos biogeoquímicos I: Ciclo do carbono","Ciclos biogeoquímicos I: Gases de efeito estufa","Ciclos biogeoquímicos I: Efeito estufa e aquecimento global","Ciclos biogeoquímicos I: Combate ao aquecimento global","Ciclos biogeoquímicos I: Acidificação dos oceanos","Ciclos biogeoquímicos I: Ciclo do oxigênio","Ciclos biogeoquímicos I: Camada de ozônio","Ciclos Biogeoquímicos I (Questões)","Ciclos biogeoquímicos II: Ciclo do nitrogênio","Ciclos biogeoquímicos II: Etapas do ciclo do nitrogênio","Ciclos biogeoquímicos II: Ciclo da água","Ciclos biogeoquímicos II: Ciclo do enxofre e chuvas ácidas","Ciclos biogeoquímicos II: Ciclo do fósforo","Ciclos Biogeoquímicos II (Questões)","Dinâmica das populações: Potencial biótico e curva de crescimento","Dinâmica das populações: Crescimento e densidade populacional","Dinâmica das populações: Fatores limitantes","Dinâmica das populações: Controle biológico","Dinâmica das Populações (Questões)","Relações ecológicas","Relações ecológicas: Colônias e sociedades","Relações ecológicas: Gregarismo","Relações ecológicas: Mutualismo e protocooperação","Relações ecológicas: Comensalismo e inquilinismo","Relações ecológicas: Canibalismo","Relações ecológicas: Competição e amensalismo","Relações ecológicas: Predatismo, parasitismo, herbivorismo e esclavagismo","Relações ecológicas: Relações em gráficos","Relações Ecológicas (Questões)","Sucessão ecológica: Ecese, séries e clímax","Sucessão ecológica: Tendências ao longo da sucessão","Sucessão ecológica: Ecossistemas jovens x maduros","Sucessão ecológica: Sucessão 2ª em áreas desmatadas","Sucessão Ecológica (Questões)","Biomas aquáticos: Biosfera e biociclos","Biomas aquáticos: Talassociclo","Biomas aquáticos: Plâncton, nécton e bênton","Biomas aquáticos: Limnociclo","Biosfera – Biomas Aquáticos (Questões)","Biomas terrestres: Epinociclo","Biomas terrestres: Principais vegetações do mundo","Biomas terrestres: Vegetações do Brasil","Biomas terrestres: Floresta amazônica","Biomas terrestres: Cerrado","Biomas terrestres: Caatinga","Biomas terrestres: Mata atlântica, araucária, pampas, pantanal, cocais e manguezais","Biosfera – Biomas Terrestres (Questões)","Desequilíbrios ecológicos: Hipótese Gaia","Desequilíbrios ecológicos: Biodiversidade","Desequilíbrios ecológicos: Desmatamento e queimadas","Desequilíbrios ecológicos: Fragmentação de ecossistemas","Desequilíbrios ecológicos: Bioinvasão","Desequilíbrios ecológicos: Espécies-chave, conservação e preservação","Desequilíbrios Ecológicos (Questões)","Poluição: Biológica, física e química","Poluição: Por metais pesados","Poluição: Por inseticidas, biomagnificação e bioacumulação","Poluição: Por detergentes e petróleo","Poluição: Eutrofização","Poluição: Manejo do lixo","Poluição: Pegada ecológica, desenvolvimento sustentável, 3R e 5R","Poluição (Questões)"
-];
-const physTasks = [
-  "Resistência Elétrica e Resistor","Primeira Lei de Ohm","Segunda Lei de Ohm","Leis de Ohm (Questões)","Potência e Energia Elétrica","Potência Elétrica","Potência e Energia (Questões)","Associação de Resistores em Série","Associação de Resistores em Paralelo","Associação Mista de Resistores e Curto Circuito","Associação de Resistores (Questões)","Amperímetro e Voltímetro","Ponte de Wheatstone","Instrumentos (Questões)","Geradores – Parte 01","Geradores – Parte 02","Geradores (Questões)","Receptores","Circuitos com Geradores e Receptores","Soma das Tensões em um Circuito","Leis de Kirchhoff",
-  "Fundamentos do Eletromagnetismo","Fundamentos do Eletromagnetismo (Questões)","Fontes de Campo Magnético – Fio","Fontes de Campo Magnético – Espira e Solenoide","Fontes de Campo Magnético (Questões)","Força Magnética – Parte 01","Força Magnética – Parte 02","Força magnética sobre um fio e entre fios paralelos","Força Magnética (Questões)","Indução Eletromagnética – Parte 01","Indução Eletromagnética – Parte 02","Transformadores","Indução Eletromagnética (Questões)",
-  "Teoria da Relatividade – Parte 01","Teoria da Relatividade – Parte 02","Dedução do Fator de Lorentz","Relação Massa e Energia","Teoria da Relatividade (Questões)","Física Quântica – Radiação do Corpo Negro","Física Quântica – Átomo de Bohr","Efeito Fotoelétrico","Física Quântica e Efeito Fotoelétrico (Questões)"
-];
-const histTasks = [
-  "Ditadura Militar – Castelo Branco","Ditadura Militar – Costa e Silva","Ditadura Militar – Castelo Branco e Costa e Silva (Questões)","Ditadura Militar – Médici","Ditadura Militar – Geisel","Ditadura Militar – Figueiredo","Ditadura Militar – Médici, Geisel e Figueiredo (Questões)","República Nova – Eleição de Tancredo e Governo Sarney","República Nova – Collor","República Nova – Itamar Franco","República Nova – Tancredo a Itamar Franco (Questões)","República Nova – Fernando Henrique Cardoso","República Nova – Lula","República Nova – Dilma","República Nova – Temer","República Nova – Bolsonaro",
-  "Crise de 1929","Fascismo Italiano","Nazismo Alemão","Totalitarismos Ibéricos","Período Entreguerra (Questões)","Segunda Guerra Mundial – Causas","Segunda Guerra Mundial – O Conflito","Segunda Guerra Mundial – O Eixo Derrotado","Conferências da Segunda Guerra","Segunda Guerra Mundial (Questões)","Guerra Fria","Revolução Chinesa","Guerra do Vietnã","Guerra da Coreia","Revolução Cubana","Crise de Berlim","Guerra do Afeganistão","Descolonização Asiática","Descolonização Africana","Guerra Fria (Questões)","Ditaduras na América Latina","Desintegração do Bloco Soviético","Revolução Iraniana e Guerra Irã–Iraque","Guerras do Golfo e Guerra do Afeganistão","Primavera Árabe","Mundo Contemporâneo (Questões)"
-];
-const philoTasks = [
-  "Jürgen Habermas","Jurgen Habermas (Questões)","Michel Foucault – Parte 1","Michel Foucault – Parte 2","Michel Foucault (Questões)","Círculo de Viena","Gaston Bachelard","Karl Popper","Thomas Kuhn","Filosofia da Ciência (Questões)","John Rawls","Hans Jonas","John Rawls e Hans Jonas (Questões)","Zygmunt Bauman (Aprofundamento)","Sigmund Freud (Aprofundamento)","Byung-Chul Han (Aprofundamento)"
-];
-
-// =====================================================================
-// DATA: APOSTILA
-// =====================================================================
-const apostilaMath = ['Aritmética','Análise Combinatória','Conjuntos','Função e equação do 1º grau','Função e equação do 2º grau','Funções','Geometria analítica','Geometria Espacial','Geometria Plana','Progressão aritmética','Progressão geométrica','Matemática financeira','Razão e Proporção','Operações básicas e divisibilidade','Sistemas e sequências','Logaritmos','Polinômios e complexos','Trigonometria','Matrizes e determinantes','Expressão algébrica','Inequação e irracionais','Produtos notáveis'];
-const apostilaPhys = ['Análise dimensional','Cinemática','Dinâmica','Eletrodinâmica','Termodinâmica','Física elétrica e capacitores','Energia','Estática, eletrostática e trabalho','Gravitação','Hidrostática','Magnetismo','Ondulatória e acústica','Óptica','Movimento harmônico simples','Calorimetria, termologia e calor','Momento linear','Análise vetorial e escalar'];
-const apostilaChem = ['Análise de espécies químicas','Atomística','Bioquímica','Cinética química','Química ambiental','Propriedades periódicas','Coloides','Eletrólise','Eletroquímica','Equilíbrio químico','Estequiometria','Forças intermoleculares','Gases','Isomeria','Materiais de laboratório','Leis ponderais','Ligações químicas','Métodos de separação de misturas','Polímeros','Propriedades coligativas','Química inorgânica','Química orgânica','Reações químicas','Termoquímica'];
-const apostilaBio = ['Origem da vida','Taxonomia e sistemática','Microbiologia','Seres vivos e reprodução','Bioquímica','Botânica','Citologia','Ecologia','Genética','Parasitologia','Zoologia','Histologia e Fisiologia'];
-const apostilaPort = ['Interpretação de texto','Literatura','Linguística e aspectos da linguagem','Estrutura e tipologia textual','Coesão textual','Discurso e vozes do texto','Estilística e vícios de linguagem','Figuras e funções da linguagem','Gêneros textuais','Gramática','Morfologia textual','Pontuação','Semântica','Sintaxe','Verbo'];
-const apostilaEdFisica = ['Saúde','Esporte e manifestações culturais','Causas sociais'];
-const apostilaHist = ['Historiografia e pré-história','Idade antiga','Idade média','Idade moderna','Idade contemporânea','Atualidades','Brasil colonial','Período regencial','Primeiro reinado','Segundo reinado','Brasil república','Era vargas','Ditadura','História do Ceará'];
-const apostilaGeo = ['Agricultura','Conceitos geográficos','Geopolítica','Globalização','Meio ambiente','População','Transporte','Urbanização','Cartografia','Climatologia','Hidrografia','Fontes de energia','Regiões','Relevo','Geologia','Vegetações e biomas','Geografia do Ceará'];
-const apostilaPhilo = ['Surgimento da filosofia','Filosofia clássica','Contratualismo','Direitos humanos e movimentos sociais','Escola de Frankfurt','Filosofia Contemporânea','Filosofia e poder','Filosofia e política','Filosofia medieval','Filosofia moderna','Mitologia','Liberalismo, silogismo e materialismo histórico','Indústria, cultura, estética e arte','Racionalismo e epistemologia','Filosofia da Ciência'];
-const apostilaSocio = ['Surgimento da sociologia','Desigualdade e preconceito','Escola de Frankfurt','Globalização e cultura','Juventude, diversidade e violência','Movimentos e problemas sociais','Relações étnico-raciais','Meio ambiente','Sociedade, estado e poder','Sociologia brasileira','Teóricos da sociologia','Trabalho e cidadania','Sociologia da religião'];
-
-// =====================================================================
-// DATA: LITERATURA URCA (120 dias, 3x por semana, ~40 sessões)
-// =====================================================================
-const literaturaItems = [
-  // Fase 1: Teoria Literária
-  "Teoria: Conceito de literatura, denotação e conotação","Teoria: Funções da Linguagem (Emotiva, Conativa, Referencial, Poética)","Teoria: Gênero Lírico – metrificação e escansão poética","Teoria: Gênero Épico/Narrativo – elementos da narrativa","Teoria: Gênero Dramático – estrutura e evolução histórica","Teoria: Figuras de Linguagem I – Metáfora, Metonímia, Antítese, Personificação","Teoria: Figuras de Linguagem II – Elipse, Hipérbato, Aliteração, Assonância","Teoria: Intertextualidade – Paródia, Paráfrase, Pastiche","Revisão Ativa: 15 exercícios sobre Gêneros e Figuras de Linguagem","Mapa Mental: Figuras de Linguagem e Funções da Linguagem",
-  // Fase 2: Trovadorismo ao Classicismo
-  "Trovadorismo: Lírica Galego-Portuguesa e contexto histórico","Trovadorismo: Cantigas de Amor e Cantigas de Amigo","Trovadorismo: Cantigas de Escárnio e Maldizer","Humanismo: Prosa e Teatro Medieval; Novelas de Cavalaria","Humanismo: Poesia Palaciana e Cancioneiro Geral de Garcia de Resende","Humanismo: Gil Vicente e o Teatro Vicentino – Auto da Barca do Inferno","Humanismo: Cronistas Medievais – Fernão Lopes","Classicismo: Contexto, Renascimento e a 'Medida Nova' de Sá de Miranda","Camões Lírico: Soneto camoniano, platonismo, 'desconcerto do mundo'","Camões Épico I: Os Lusíadas – Estrutura formal e estrofe real","Camões Épico II: Os Lusíadas – Inês de Castro, Velho do Restelo, Adamastor","Eixo Temático: A presença do épico nas literaturas lusófonas","Questões: Trovadorismo, Gil Vicente e Camões","Fichamento: Cantigas de Amigo vs. Amor | Camões Lírico vs. Épico",
-  // Fase 3: Brasil Colonial e Barroco
-  "Quinhentismo: A Carta de Pero Vaz de Caminha – olhar do colonizador","Quinhentismo: Literatura jesuítica e Padre José de Anchieta","Barroco: Contexto histórico, dualismo, Cultismo e Conceptismo","Barroco: Bento Teixeira e o poema Prosopopeia","Barroco: Gregório de Matos – poesia lírica amorosa e filosófica","Barroco: Gregório de Matos 'Boca do Inferno' – poesia satírica","Barroco: Padre Antônio Vieira – Sermão da Sexagésima","Barroco: Padre Antônio Vieira – Sermão de Santo António aos Peixes","Arcadismo: Contexto, bucolismo, fugere urbem, locus amoenus","Arcadismo: Cláudio Manuel da Costa – Obras e paisagem mineira","Arcadismo: Tomás Antônio Gonzaga – Marília de Dirceu","Arcadismo: Gonzaga – Cartas Chilenas; Basílio da Gama – O Uraguai","Questões URCA: Barroco e Arcadismo","Quadro Comparativo: Barroco vs. Arcadismo",
-  // Fase 4: Romantismo
-  "Romantismo: Contexto histórico e características gerais","Poesia Romântica 1ª Geração: Gonçalves Dias – I-Juca-Pirama, Canção do Exílio","Poesia Romântica 2ª Geração: Álvares de Azevedo – Noite na Taverna","Poesia Romântica 3ª Geração: Castro Alves – O Navio Negreiro","Prosa Romântica: Joaquim Manuel de Macedo – A Moreninha","Prosa Romântica: Manuel Antônio de Almeida – Memórias de um Sargento de Milícias","José de Alencar – O Guarani, Iracema, Ubirajara (Romance Indianista)","José de Alencar – Senhora e Lucíola (Romance Urbano)","Regionalism Romântico: Bernardo Guimarães – O Seminarista, A Escrava Isaura","Teatro Romântico: Martins Pena – O Noviço","Romantismo no Ceará: Juvenal Galeno e as primeiras agremiações literárias","Eixo Temático: Nacionalismo Romântico e construção do 'ser brasileiro'","Questões URCA: Romantismo – José de Alencar, Iracema e Castro Alves","Fichamento: Personagens de Iracema, Senhora e O Seminarista",
-  // Fase 5: Realismo, Naturalismo, Parnasianismo, Simbolismo
-  "Realismo e Naturalismo: Contexto científico (Positivismo, Determinismo, Darwin)","Machado de Assis: Fase Romântica vs. Fase Realista","Machado de Assis: Memórias Póstumas de Brás Cubas – ironia e metalinguagem","Machado de Assis: Dom Casmurro e Quincas Borba","Machado de Assis: Contos – O Alienista, A Cartomante, Pai contra Mãe","Aluísio Azevedo: O Cortiço – determinismo, zoomorfização","Raul Pompeia: O Ateneu – romance de formação e análise psicológica","[FOCO URCA] Adolfo Caminha: Bom Crioulo e A Normalista","[FOCO URCA] Domingos Olímpio: Luzia-Homem – determinismo da seca do Ceará","[FOCO URCA] Manuel de Oliveira Paiva: Dona Guidinha do Poço – coronelismo","[FOCO URCA] Padaria Espiritual (1892): Antônio Sales, revista O Pão e sátira antiburguesa","Eça de Queiroz: O Primo Basílio e Os Maias","Parnasianismo: Olavo Bilac, 'Arte pela Arte', rigor formal","Simbolismo: Cruz e Sousa; Alphonsus de Guimaraens – Ismália","Questões URCA: Naturalismo Cearense, Padaria Espiritual, Parnasianismo","Redação Comparativa: Naturalismos no Ceará – seca, sertão e determinismo",
-  // Fase 6: Modernismo 1ª Geração
-  "Pré-Modernismo: Canudos, Chibata, Vacina – o Brasil não oficial","Euclides da Cunha: Os Sertões – estrutura, determinismo, massacre de Canudos","Lima Barreto: Triste Fim de Policarpo Quaresma","Monteiro Lobato (Jeca Tatu) e Augusto dos Anjos (Eu – poesia científica)","Modernismo em Portugal: Orpheu 1915, Mário de Sá-Carneiro","Fernando Pessoa Ortônimo: dor de pensar, fingimento poético","Fernando Pessoa / Alberto Caeiro: objetivismo sensorial, recusa à metafísica","Fernando Pessoa / Ricardo Reis: epicurismo e estoicismo","Fernando Pessoa / Álvaro de Campos: futurismo e Tabacaria","Modernismo Brasileiro: Semana de Arte Moderna de 1922","1ª Geração: Oswald de Andrade – Manifesto Antropofágico","1ª Geração: Mário de Andrade – Macunaíma","1ª Geração: Manuel Bandeira – Pasárgada e a poética do cotidiano","Quadro dos Heterônimos de Pessoa + 10 questões sobre Modernismo 1922",
-  // Fase 7: Modernismo 2ª e 3ª Gerações + Ceará
-  "2ª Geração: Contexto da Prosa de 30 – neorregionalismo nordestino","Rachel de Queiroz: O Quinze – seca de 1915 no Ceará","Graciliano Ramos: Vidas Secas – Fabiano e a cachorra Baleia","Graciliano Ramos: São Bernardo e Angústia","Jorge Amado: Capitães da Areia; José Lins do Rego: Menino de Engenho","Carlos Drummond de Andrade: o 'gauche' na vida, fases poéticas","Cecília Meireles: Romanceiro da Inconfidência; Vinicius de Moraes","3ª Geração: João Guimarães Rosa – Grande Sertão: Veredas","3ª Geração: Clarice Lispector – A Hora da Estrela, epifania e fluxo de consciência","3ª Geração: João Cabral de Melo Neto – Morte e Vida Severina","[FOCO URCA] Moreira Campos: conto cearense e realismo psicológico","[FOCO URCA] Patativa do Assaré: Triste Partida, Vaca Estrela e Boi Fubá","Questões URCA: Romance de 30 (O Quinze) e Poesia de 30","Análise Comparada: Fabiano (Vidas Secas) vs. Chico Bento (O Quinze)",
-  // Fase 8: Literaturas Africanas + Eixos URCA
-  "Literaturas Africanas: Contexto das Independências lusófonas (Angola, Moçambique...)","Angola: Luandino Vieira (Luuanda) e Pepetela (Mayombe)","Moçambique: Mia Couto (Terra Sonâmbula) e Paulina Chiziane (Niketche)","Eixo Temático URCA: Elementos Messiânicos e Sebastianistas nas literaturas lusófonas","Eixo Temático URCA: O sertão como espaço místico, violência e resistência","Literatura Contemporânea: Ariano Suassuna (Auto da Compadecida), Raduan Nassar","[FOCO URCA] Ronaldo Correia de Brito – Faca (contos do sertão); Xico Sá – Big Jato","Análise de provas anteriores da URCA – tendências e obras indicadas","Simulado: 20 questões de Literaturas Africanas, Cearenses e Eixos Temáticos","Resumo Crítico: Romance cearense contemporâneo – memória e violência",
-  // Fase 9: Revisão Geral
-  "Revisão: Era Colonial (Quinhentismo, Barroco, Arcadismo) + 10 questões","Revisão: Romantismo, Realismo, Naturalismo, Parnasianismo, Simbolismo + 15 questões URCA","Revisão: Modernismo (1922, 30, 45, Fernando Pessoa) + 15 questões","Obras Obrigatórias: Revisão de fichas – enredo, personagens, relevância social","Simulado Completo: Prova de Língua Portuguesa/Literatura URCA (tempo real)","Revisão Final: Figuras de Linguagem, mapas mentais + descanso mental pré-prova"
-];
-
-// =====================================================================
-// SCHEDULE GENERATION
-// =====================================================================
-function uid() { return Math.random().toString(36).substr(2, 9); }
-
-function generateSchedule() {
-  const ferrettoPools = {
-    'Matemática': [...mathTasks],
-    'Biologia': [...bioTasks],
-    'Física': [...physTasks],
-    'História': [...histTasks],
-    'Filosofia': [...philoTasks]
-  };
-  const apostilaPools = {
-    'Matemática (Apostila)': [...apostilaMath],
-    'Física (Apostila)': [...apostilaPhys],
-    'Química (Apostila)': [...apostilaChem],
-    'Biologia (Apostila)': [...apostilaBio],
-    'Português (Apostila)': [...apostilaPort],
-    'Ed. Física (Apostila)': [...apostilaEdFisica],
-    'História (Apostila)': [...apostilaHist],
-    'Geografia (Apostila)': [...apostilaGeo],
-    'Filosofia (Apostila)': [...apostilaPhilo],
-    'Sociologia (Apostila)': [...apostilaSocio]
-  };
-  const litPool = [...literaturaItems];
-
-  // Literature goes 3x per week (Tue, Thu, Sat = days 2,4,6)
-  const litDays = new Set([2,4,6]); // dayOfWeek: Tue=2, Thu=4, Sat=6
-
-  const pullFerretto = (subject) => {
-    if (ferrettoPools[subject] && ferrettoPools[subject].length > 0) {
-      return { subject, title: ferrettoPools[subject].shift(), done: false, id: uid(), type: 'video' };
-    }
-    let best = null, bestLen = 0;
-    for (const [k, pool] of Object.entries(ferrettoPools)) {
-      if (pool.length > bestLen) { bestLen = pool.length; best = k; }
-    }
-    if (best) return { subject: best, title: ferrettoPools[best].shift(), done: false, id: uid(), type: 'video' };
-    return null;
-  };
-
-  const pullApostila = (count, usedSubjects) => {
-    const tasks = [];
-    for (let i = 0; i < count; i++) {
-      let available = Object.keys(apostilaPools).filter(k => apostilaPools[k].length > 0 && !tasks.map(t=>t.subject).includes(k));
-      if (!available.length) available = Object.keys(apostilaPools).filter(k => apostilaPools[k].length > 0);
-      if (!available.length) break;
-      available.sort((a,b) => apostilaPools[b].length - apostilaPools[a].length);
-      const subj = available[0];
-      tasks.push({ subject: subj, title: apostilaPools[subj].shift(), done: false, id: uid(), type: 'apostila' });
-    }
-    return tasks;
-  };
-
-  const ferrettoBlueprint = {
-    1: ['Biologia','Biologia','Matemática','Matemática','Física','História'],
-    2: ['Biologia','Biologia','Física','História','Filosofia','Matemática'],
-    3: ['Biologia','Biologia','Matemática','Matemática','Física','História'],
-    4: ['Biologia','Biologia','Física','História','Filosofia','Matemática'],
-    5: ['Biologia','Biologia','Matemática','Física','História','Filosofia'],
-    6: ['Biologia','Matemática'],
-    0: []
-  };
-  const apostilasPerDay = { 1:2, 2:1, 3:2, 4:1, 5:2, 6:1, 0:0 };
-
-  const weekDays = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
-  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-
-  const startDate = new Date();
-  startDate.setHours(0,0,0,0);
-  const allDays = [];
-
-  for (let i = 1; i <= 120; i++) {
-    const cur = new Date(startDate);
-    cur.setDate(startDate.getDate() + i - 1);
-    const dow = cur.getDay();
-    const isRest = dow === 0;
-    const tasks = [];
-
-    if (!isRest) {
-      if (i <= 60) {
-        (ferrettoBlueprint[dow] || []).forEach(s => {
-          const t = pullFerretto(s);
-          if (t) tasks.push(t);
-        });
-      }
-      tasks.push(...pullApostila(apostilasPerDay[dow] || 0, []));
-
-      // Literature 3x per week
-      if (litDays.has(dow) && litPool.length > 0) {
-        tasks.push({ subject: 'Literatura (URCA)', title: litPool.shift(), done: false, id: uid(), type: 'literatura' });
-      }
-    }
-
-    allDays.push({
-      day: i,
-      dateStr: `${cur.getDate().toString().padStart(2,'0')}/${(cur.getMonth()+1).toString().padStart(2,'0')}`,
-      fullDate: `${cur.getDate()} de ${months[cur.getMonth()]}`,
-      weekDayName: weekDays[dow],
-      isRest,
-      tasks
-    });
-  }
-
-  // Distribute leftover Ferretto tasks
-  let ferrettoLeft = [];
-  for (const [k, pool] of Object.entries(ferrettoPools))
-    pool.forEach(t => ferrettoLeft.push({ subject: k, title: t, done: false, id: uid(), type: 'video' }));
-  if (ferrettoLeft.length) {
-    let d = 59;
-    while (ferrettoLeft.length > 0 && d >= 0) {
-      if (!allDays[d].isRest) allDays[d].tasks.unshift(ferrettoLeft.shift());
-      d--; if (d < 0 && ferrettoLeft.length > 0) d = 59;
-    }
-  }
-
-  // Distribute leftover Apostila
-  let apostilaLeft = [];
-  for (const [k, pool] of Object.entries(apostilaPools))
-    pool.forEach(t => apostilaLeft.push({ subject: k, title: t, done: false, id: uid(), type: 'apostila' }));
-  if (apostilaLeft.length) {
-    let d = 119;
-    while (apostilaLeft.length > 0 && d >= 60) {
-      if (!allDays[d].isRest) allDays[d].tasks.push(apostilaLeft.shift());
-      d--; if (d < 60 && apostilaLeft.length > 0) d = 119;
-    }
-  }
-
-  // Distribute leftover Literatura
-  if (litPool.length) {
-    let d = 119;
-    while (litPool.length > 0 && d >= 0) {
-      if (!allDays[d].isRest) allDays[d].tasks.push({ subject: 'Literatura (URCA)', title: litPool.shift(), done: false, id: uid(), type: 'literatura' });
-      d--; if (d < 0 && litPool.length > 0) d = 119;
-    }
-  }
-
-  return allDays;
-}
-
-// =====================================================================
-// STATE
-// =====================================================================
-const STORE_KEY = 'cronograma_120d_v3';
-const ACTIVE_KEY = 'cronograma_active_v3';
-
-let schedule = (() => {
-  try { const s = localStorage.getItem(STORE_KEY); return s ? JSON.parse(s) : generateSchedule(); }
-  catch { return generateSchedule(); }
-})();
-let activeDay = (() => {
-  try { return parseInt(localStorage.getItem(ACTIVE_KEY)) || 1; }
-  catch { return 1; }
-})();
-let viewMode = 'daily';
-
-function save() {
-  localStorage.setItem(STORE_KEY, JSON.stringify(schedule));
-  localStorage.setItem(ACTIVE_KEY, activeDay.toString());
-}
-
-// =====================================================================
-// SUBJECT COLORS
-// =====================================================================
-function getTagStyle(subject) {
-  const s = subject.replace(' (Apostila)', '');
-  const map = {
-    'Matemática': { color: '#818cf8', bg: 'rgba(129,140,248,0.1)', border: 'rgba(129,140,248,0.2)' },
-    'Biologia': { color: '#10b981', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
-    'Física': { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.2)' },
-    'História': { color: '#eab308', bg: 'rgba(234,179,8,0.1)', border: 'rgba(234,179,8,0.2)' },
-    'Filosofia': { color: '#a855f7', bg: 'rgba(168,85,247,0.1)', border: 'rgba(168,85,247,0.2)' },
-    'Química': { color: '#ec4899', bg: 'rgba(236,72,153,0.1)', border: 'rgba(236,72,153,0.2)' },
-    'Português': { color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)', border: 'rgba(139,92,246,0.2)' },
-    'Geografia': { color: '#14b8a6', bg: 'rgba(20,184,166,0.1)', border: 'rgba(20,184,166,0.2)' },
-    'Sociologia': { color: '#f43f5e', bg: 'rgba(244,63,94,0.1)', border: 'rgba(244,63,94,0.2)' },
-    'Ed. Física': { color: '#06b6d4', bg: 'rgba(6,182,212,0.1)', border: 'rgba(6,182,212,0.2)' },
-    'Literatura (URCA)': { color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.25)' }
-  };
-  for (const key of Object.keys(map)) {
-    if (s.includes(key)) return map[key];
-  }
-  return { color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)' };
-}
-
-function typeIcon(type) {
-  if (type === 'video') return '▶ Vídeo';
-  if (type === 'apostila') return '📖 Apostila';
-  if (type === 'literatura') return '📚 Literatura';
-  return type;
-}
-
-// =====================================================================
-// RENDER
-// =====================================================================
-function updateProgress() {
-  const total = schedule.reduce((a, d) => a + d.tasks.length, 0);
-  const done = schedule.reduce((a, d) => a + d.tasks.filter(t => t.done).length, 0);
-  const pct = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('pct-text').textContent = pct + '%';
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-sub').textContent = `${done} de ${total} tarefas`;
-}
-
-function renderCalendar() {
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-  schedule.forEach(d => {
-    const isDone = !d.isRest && d.tasks.length > 0 && d.tasks.every(t => t.done);
-    const isSelected = d.day === activeDay;
-    const btn = document.createElement('button');
-    btn.className = 'day-btn' + (isSelected ? ' selected' : '') + (d.isRest ? ' rest' : '') + (isDone && !isSelected ? ' done' : '');
-    btn.innerHTML = `<span class="day-num">D${d.day}</span><span class="day-date">${d.dateStr}</span>${isDone && !isSelected ? '<span class="done-dot"></span>' : ''}`;
-    btn.title = d.isRest ? 'Domingo – Descanso' : d.fullDate;
-    btn.onclick = () => { activeDay = d.day; save(); renderAll(); };
-    grid.appendChild(btn);
-  });
-}
-
-function renderTasks() {
-  const dayData = schedule[activeDay - 1];
-  document.getElementById('day-title').textContent = `Dia ${activeDay}`;
-  const badge = document.getElementById('day-badge');
-  const sub = document.getElementById('day-subtitle');
-  const list = document.getElementById('tasks-list');
-
-  if (dayData.isRest) {
-    badge.textContent = 'Descanso';
-    badge.className = 'day-badge rest';
-    sub.textContent = 'O repouso consolida a memória. Dia livre.';
-    list.innerHTML = `<div class="rest-screen">
-      <div class="rest-icon">☕</div>
-      <h3>Momento de Descompressão</h3>
-      <p>Vá caminhar, ler algo por prazer ou simplesmente descansar. O foco amanhã será melhor por causa de hoje.</p>
-    </div>`;
-    return;
-  }
-
-  badge.textContent = dayData.weekDayName;
-  badge.className = 'day-badge weekday';
-  const pending = dayData.tasks.filter(t => !t.done).length;
-  const allDone = dayData.tasks.length > 0 && pending === 0;
-  sub.textContent = allDone
-    ? '✅ Missão do dia concluída. Excelente trabalho!'
-    : `${pending} tarefa${pending !== 1 ? 's' : ''} aguardando hoje · ${dayData.fullDate}`;
-
-  list.innerHTML = dayData.tasks.map((task, idx) => {
-    const styles = getTagStyle(task.subject);
-    const cleanTitle = task.title.replace('Aula: ','').replace(' (Estudo e Exercícios)','');
-    const cleanSubject = task.subject.replace(' (Apostila)','');
-    return `<div class="task-item${task.done ? ' done' : ''}" data-idx="${idx}">
-      <div class="check${task.done ? ' checked' : ''}">✓</div>
-      <div class="task-info">
-        <div class="task-tags">
-          <span class="tag" style="color:${styles.color};background:${styles.bg};border-color:${styles.border}">${cleanSubject}</span>
-          <span class="tag-type">${typeIcon(task.type)}</span>
-        </div>
-        <div class="task-name">${cleanTitle}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  list.querySelectorAll('.task-item').forEach(el => {
-    el.onclick = () => {
-      const idx = parseInt(el.dataset.idx);
-      schedule[activeDay - 1].tasks[idx].done = !schedule[activeDay - 1].tasks[idx].done;
-      save(); renderAll();
-    };
-  });
-}
-
-function renderPanoramic() {
-  const subjects = ['Matemática','Física','Biologia','Química','Português','História','Geografia','Filosofia','Sociologia','Ed. Física','Literatura (URCA)'];
-  const grid = document.getElementById('panoramic-grid');
-  grid.innerHTML = '';
-
-  subjects.forEach(base => {
-    const allTasks = [];
-    schedule.forEach((d, di) => {
-      d.tasks.forEach((t, ti) => {
-        if (t.subject.includes(base) || (base === 'Ed. Física' && t.subject.includes('Ed. Física'))) {
-          allTasks.push({ ...t, di, ti, dayNum: d.day });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meu Cronograma RPG V18.0</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: { bg: '#0f172a', card: '#1e293b', border: '#334155' }
+                    },
+                    animation: {
+                        'flip': 'flip 0.6s',
+                        'float': 'float 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
         }
-      });
-    });
-    if (!allTasks.length) return;
+    </script>
+    <style>
+        body {
+            background-attachment: fixed;
+            background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08), transparent 25%);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .task-item { cursor: grab; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+        .task-item:active { cursor: grabbing; transform: scale(0.98); }
+        .task-item.dragging { opacity: 0.6; transform: scale(1.02) rotate(2deg); z-index: 50; border-color: currentColor; }
+        .drag-over { background-color: rgba(99, 102, 241, 0.1) !important; border: 2px dashed currentColor !important; }
+        
+        .task-item .delete-btn { transition: opacity 0.2s; }
+        @media (min-width: 768px) {
+            .task-item .delete-btn { opacity: 0; }
+            .task-item:hover .delete-btn { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 767px) {
+             .task-item .delete-btn { opacity: 1; }
+        }
+        
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 9999px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s ease; position: relative; }
+        .calendar-day:hover:not(.empty) { background-color: rgba(99, 102, 241, 0.1); }
+        .calendar-day.has-history { font-weight: bold; color: white; }
+        
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        #helpPanel { transition: opacity 0.3s ease, transform 0.3s ease; }
+        
+        .achievement-card { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .achievement-card:hover { transform: translateY(-5px) scale(1.02); }
+        .achievement-locked { filter: grayscale(100%) opacity(0.4); transition: all 0.3s; }
+        .achievement-locked:hover { filter: grayscale(100%) opacity(0.6); transform: none; }
+        
+        /* Progress Bar Stripes */
+        .progress-striped {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+        @keyframes progress-bar-stripes { 0% { background-position: 1rem 0; } 100% { background-position: 0 0; } }
 
-    const done = allTasks.filter(t => t.done).length;
-    const styles = getTagStyle(base);
-    const card = document.createElement('div');
-    card.className = 'subject-card';
-    card.innerHTML = `
-      <div class="subject-card-header">
-        <span class="tag" style="color:${styles.color};background:${styles.bg};border-color:${styles.border};font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid">${base}</span>
-        <span class="subj-count">${done} / ${allTasks.length}</span>
-      </div>
-      <div class="subj-scroll">
-        ${allTasks.map((task, i) => {
-          const cleanTitle = task.title.replace('Aula: ','').replace(' (Estudo e Exercícios)','');
-          return `<div class="mini-task${task.done ? ' done' : ''}" data-di="${task.di}" data-ti="${task.ti}">
-            <div class="mini-check${task.done ? ' checked' : ''}">✓</div>
-            <div class="mini-task-info">
-              <div class="mini-name">${cleanTitle}</div>
-              <div class="mini-meta">
-                <span class="mini-tag">Dia ${task.dayNum}</span>
-                <span class="mini-tag" style="color:${task.type === 'literatura' ? '#fb923c' : task.type === 'video' ? '#3b82f6' : '#818cf8'}">· ${typeIcon(task.type)}</span>
-              </div>
-            </div>
-          </div>`;
-        }).join('')}
-      </div>`;
-    grid.appendChild(card);
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .avatar-preview { object-fit: cover; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-dark-bg dark:text-slate-50 min-h-screen selection:bg-indigo-500 selection:text-white transition-colors duration-300 overflow-x-hidden">
+    <div id="root"></div>
 
-    card.querySelectorAll('.mini-task').forEach(el => {
-      el.onclick = () => {
-        const di = parseInt(el.dataset.di), ti = parseInt(el.dataset.ti);
-        schedule[di].tasks[ti].done = !schedule[di].tasks[ti].done;
-        save(); renderAll();
-      };
-    });
-  });
-}
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
 
-function renderAll() {
-  updateProgress();
-  if (viewMode === 'daily') { renderCalendar(); renderTasks(); }
-  else renderPanoramic();
-  document.getElementById('btn-prev').disabled = activeDay <= 1;
-  document.getElementById('btn-next').disabled = activeDay >= 120;
-}
+        // --- Config & Constants ---
+        const STORAGE_KEY = 'studyScheduleData_V18_0_UltraHardcore'; 
+        
+        const THEMES = {
+            indigo: { name: 'Indigo', class: 'text-indigo-600', bg: 'bg-indigo-600', border: 'border-indigo-500', from: 'from-indigo-600', to: 'to-purple-600' },
+            emerald: { name: 'Esmeralda', class: 'text-emerald-600', bg: 'bg-emerald-600', border: 'border-emerald-500', from: 'from-emerald-600', to: 'to-teal-600' },
+            rose: { name: 'Rosa', class: 'text-rose-600', bg: 'bg-rose-600', border: 'border-rose-500', from: 'from-rose-600', to: 'to-pink-600' },
+            amber: { name: 'Laranja', class: 'text-amber-600', bg: 'bg-amber-600', border: 'border-amber-500', from: 'from-amber-500', to: 'to-orange-600' },
+            sky: { name: 'Céu', class: 'text-sky-600', bg: 'bg-sky-600', border: 'border-sky-500', from: 'from-sky-500', to: 'to-blue-600' },
+        };
 
-// =====================================================================
-// VIEW / NAVIGATION
-// =====================================================================
-function setView(mode) {
-  viewMode = mode;
-  document.getElementById('view-daily').classList.toggle('hidden', mode !== 'daily');
-  document.getElementById('view-list').classList.toggle('hidden', mode !== 'list');
-  document.getElementById('tab-daily').classList.toggle('active', mode === 'daily');
-  document.getElementById('tab-list').classList.toggle('active', mode === 'list');
-  renderAll();
-}
+        // Study Levels Configuration
+        const STUDY_LEVELS = {
+            'Básico': { label: 'Básico', minutes: 30, xpMultiplier: 1.0, color: 'bg-green-500', icon: '🌱' },
+            'Médio': { label: 'Médio', minutes: 60, xpMultiplier: 1.2, color: 'bg-yellow-500', icon: '🔥' },
+            'Hardcore': { label: 'Hardcore', minutes: 120, xpMultiplier: 2.0, color: 'bg-red-600', icon: '💪' },
+            'Ultra-Hardcore': { label: 'Ultra-Hardcore', minutes: 240, xpMultiplier: 3.0, color: 'bg-purple-900', icon: '☠️' }
+        };
 
-function navigateDay(dir) {
-  activeDay = Math.max(1, Math.min(120, activeDay + dir));
-  save(); renderAll();
-}
+        // --- ACHIEVEMENTS LIST EXPANDED ---
+        const ACHIEVEMENTS_LIST = [
+            // INÍCIO
+            { id: 'first_step', title: 'Primeiros Passos', desc: 'Ganhe seus primeiros 50 XP.', icon: 'footprints', xp: 50, gradient: 'linear-gradient(135deg, #60a5fa, #3b82f6)', req: (d) => d.xp >= 50 },
+            
+            // REDAÇÃO
+            { id: 'essay_novice', title: 'Escritor Iniciante', desc: 'Escreva 1 redação.', icon: 'pen-tool', xp: 100, gradient: 'linear-gradient(135deg, #f472b6, #db2777)', req: (d) => d.essays.length >= 1 },
+            { id: 'essay_pro', title: 'Jornalista', desc: 'Escreva 5 redações.', icon: 'feather', xp: 300, gradient: 'linear-gradient(135deg, #fb7185, #e11d48)', req: (d) => d.essays.length >= 5 },
+            { id: 'essay_master', title: 'Machado de Assis', desc: 'Escreva 10 redações.', icon: 'book-open', xp: 1000, gradient: 'linear-gradient(135deg, #c084fc, #7e22ce)', req: (d) => d.essays.length >= 10 },
+            { id: 'essay_900', title: 'Meu Primeiro 900+', desc: 'Tire 900+ em uma redação.', icon: 'award', xp: 1000, gradient: 'linear-gradient(135deg, #facc15, #a16207)', req: (d) => d.essays.some(e => e.grade >= 900) },
 
-// =====================================================================
-// MODAL
-// =====================================================================
-document.getElementById('btn-cancel').onclick = () => document.getElementById('modal').classList.add('hidden');
-document.getElementById('btn-confirm').onclick = () => {
-  schedule = generateSchedule();
-  activeDay = 1;
-  save();
-  document.getElementById('modal').classList.add('hidden');
-  renderAll();
-};
+            // SIMULADOS & TRI
+            { id: 'simulado_rookie', title: 'Primeiro Teste', desc: 'Complete 1 simulado.', icon: 'clipboard-list', xp: 150, gradient: 'linear-gradient(135deg, #38bdf8, #0284c7)', req: (d) => d.simulados.length >= 1 },
+            { id: 'simulado_pro', title: 'Concurseiro', desc: 'Complete 5 simulados.', icon: 'graduation-cap', xp: 500, gradient: 'linear-gradient(135deg, #818cf8, #4338ca)', req: (d) => d.simulados.length >= 5 },
+            { id: 'simulado_elite', title: 'Gabaritou', desc: 'Acerte mais de 90% num simulado.', icon: 'check-circle-2', xp: 800, gradient: 'linear-gradient(135deg, #4ade80, #16a34a)', req: (d) => d.simulados.some(s => s.percentage >= 90) },
+            { id: 'tri_master', title: 'Mestre do TRI', desc: 'Tire mais de 750 (TRI) num simulado.', icon: 'bar-chart-4', xp: 1200, gradient: 'linear-gradient(135deg, #f43f5e, #9f1239)', req: (d) => d.simulados.some(s => s.triScore && s.triScore >= 750) },
+            
+            // TEMPO & FOCO
+            { id: 'hours_10', title: 'Maratonista', desc: 'Acumule 10h de estudo.', icon: 'clock', xp: 300, gradient: 'linear-gradient(135deg, #2dd4bf, #0f766e)', req: (d) => d.totalMinutes >= 600 },
+            { id: 'hours_50', title: 'Dedicação Total', desc: 'Acumule 50h de estudo.', icon: 'battery-charging', xp: 2000, gradient: 'linear-gradient(135deg, #fbbf24, #b45309)', req: (d) => d.totalMinutes >= 3000 },
+            { id: 'hours_100', title: 'Centenário', desc: 'Acumule 100h de estudo.', icon: 'crown', xp: 5000, gradient: 'linear-gradient(135deg, #fbbf24, #78350f)', req: (d) => d.totalMinutes >= 6000 },
+            { id: 'pomodoro_novice', title: 'Foco Iniciante', desc: 'Complete 1 ciclo Pomodoro.', icon: 'timer', xp: 100, gradient: 'linear-gradient(135deg, #22d3ee, #0891b2)', req: (d) => d.pomoCompleted >= 1 },
+            { id: 'pomodoro_master', title: 'Monge do Foco', desc: 'Complete 10 ciclos Pomodoro.', icon: 'hourglass', xp: 1000, gradient: 'linear-gradient(135deg, #0ea5e9, #0369a1)', req: (d) => d.pomoCompleted >= 10 },
 
-// Scroll active day into view in calendar
-function scrollActiveDay() {
-  setTimeout(() => {
-    const grid = document.getElementById('cal-grid');
-    const btns = grid.querySelectorAll('.day-btn');
-    if (btns[activeDay - 1]) btns[activeDay - 1].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }, 50);
-}
+            // SEQUÊNCIA (STREAK)
+            { id: 'streak_3', title: 'Aquecendo', desc: 'Sequência de 3 dias.', icon: 'flame', xp: 200, gradient: 'linear-gradient(135deg, #fdba74, #c2410c)', req: (d) => d.streak >= 3 },
+            { id: 'streak_7', title: 'Imparável', desc: 'Sequência de 7 dias.', icon: 'zap', xp: 500, gradient: 'linear-gradient(135deg, #facc15, #ca8a04)', req: (d) => d.streak >= 7 },
+            { id: 'streak_30', title: 'Disciplina de Ferro', desc: 'Sequência de 30 dias.', icon: 'shield-check', xp: 3000, gradient: 'linear-gradient(135deg, #94a3b8, #475569)', req: (d) => d.streak >= 30 },
 
-// =====================================================================
-// INIT
-// =====================================================================
-renderAll();
-scrollActiveDay();
-</script>
+            // ESPECIAIS & HORÁRIOS
+            { id: 'early_bird', title: 'Madrugador', desc: 'Estude antes das 8h da manhã.', icon: 'sunrise', xp: 250, gradient: 'linear-gradient(135deg, #fde047, #eab308)', req: (d) => { const h = new Date().getHours(); return h < 8 && d.todayMinutes > 0; } },
+            { id: 'night_owl', title: 'Corujão', desc: 'Estude depois das 22h.', icon: 'moon', xp: 250, gradient: 'linear-gradient(135deg, #6366f1, #312e81)', req: (d) => { const h = new Date().getHours(); return h >= 22 && d.todayMinutes > 0; } },
+            { id: 'weekend_warrior', title: 'Guerreiro de FDS', desc: 'Estude no Sábado ou Domingo.', icon: 'sword', xp: 400, gradient: 'linear-gradient(135deg, #ef4444, #991b1b)', req: (d) => { const day = new Date().getDay(); return (day === 0 || day === 6) && d.todayMinutes > 0; } },
+
+            // ERROS
+            { id: 'error_tracker', title: 'Autocrítico', desc: 'Registre 5 erros no caderno.', icon: 'book-x', xp: 300, gradient: 'linear-gradient(135deg, #f87171, #dc2626)', req: (d) => d.errorNotes.length >= 5 },
+            
+            // NÍVEIS
+            { id: 'level_5', title: 'Veterano', desc: 'Alcance o nível 5.', icon: 'chevrons-up', xp: 500, gradient: 'linear-gradient(135deg, #2dd4bf, #0f766e)', req: (d) => d.level >= 5 },
+            { id: 'level_10', title: 'Lendário', desc: 'Alcance o nível 10.', icon: 'star', xp: 2000, gradient: 'linear-gradient(135deg, #f59e0b, #b45309)', req: (d) => d.level >= 10 },
+            { id: 'ultra_hardcore', title: 'Sobrevivente', desc: 'Ative o modo Ultra-Hardcore.', icon: 'skull', xp: 666, gradient: 'linear-gradient(135deg, #000000, #4c1d95)', req: (d) => d.studyLevel === 'Ultra-Hardcore' },
+        ];
+
+        const COLORS = {
+            "Física": "#3b82f6", "Matemática": "#6366f1", "Química": "#8b5cf6", "Português": "#ec4899",
+            "História": "#f59e0b", "Biologia": "#10b981", "Geografia": "#06b6d4", "Inglês": "#ef4444",
+            "Filosofia": "#eab308", "Sociologia": "#64748b", "Redação": "#f43f5e", 
+            "Revisão": "#14b8a6", "Default": "#64748b"
+        };
+
+        const getColor = (subject) => {
+            if (COLORS[subject]) return COLORS[subject];
+            let hash = 0;
+            for (let i = 0; i < subject.length; i++) hash = subject.charCodeAt(i) + ((hash << 5) - hash);
+            const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+            return '#' + "00000".substring(0, 6 - c.length) + c;
+        };
+
+        const formatTime = (mins) => {
+            if (isNaN(mins) || mins < 0) return "0h 00min";
+            const h = Math.floor(mins / 60);
+            const m = mins % 60;
+            return `${h}h ${m.toString().padStart(2, '0')}min`;
+        };
+
+        const getGreeting = () => {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Bom dia";
+            if (hour < 18) return "Boa tarde";
+            return "Boa noite";
+        };
+
+        // --- Components ---
+        
+        const XpToast = ({ xp, visible, onEnd }) => {
+            if (!visible) return null;
+            return (
+                <div className="fixed bottom-32 right-6 z-50 animate-[slideUp_2s_ease-out_forwards] pointer-events-none" onAnimationEnd={onEnd}>
+                    <div className="bg-slate-900 text-white px-4 py-2 rounded-full shadow-2xl font-bold flex items-center gap-2 border-2 border-yellow-400 text-yellow-400">
+                        <span>+{xp} XP</span>
+                        <i data-lucide="star" className="w-4 h-4 fill-yellow-400"></i>
+                    </div>
+                </div>
+            );
+        };
+
+        const Modal = ({ isOpen, onClose, title, children, className }) => {
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out] overflow-hidden">
+                    <div className="absolute inset-0" onClick={onClose}></div>
+                    <div className={`relative bg-white dark:bg-slate-900 w-full md:w-full max-w-md md:max-w-2xl rounded-t-3xl md:rounded-3xl shadow-2xl border-t md:border border-slate-200 dark:border-slate-700 flex flex-col max-h-[85vh] ${className}`}>
+                        <div className="flex justify-between items-center p-6 border-b border-slate-100 dark:border-slate-800 shrink-0">
+                            <h3 className="text-lg md:text-2xl font-display font-bold text-slate-900 dark:text-white truncate pr-4">{title}</h3>
+                            <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-500 shrink-0">
+                                <i data-lucide="x" className="w-6 h-6"></i>
+                            </button>
+                        </div>
+                        <div className="p-6 overflow-y-auto">
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const LevelUpModal = ({ isOpen, onClose, level }) => {
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-[fadeIn_0.5s_ease-out]">
+                     <div className="text-center relative bg-white dark:bg-slate-900 p-12 rounded-3xl border-2 border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.5)] max-w-sm w-full">
+                        <div className="text-6xl mb-4 animate-bounce">🏆</div>
+                        <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">LEVEL UP!</h2>
+                        <p className="text-slate-600 dark:text-slate-300 text-xl font-bold">Você alcançou o Nível {level}</p>
+                        <p className="text-sm text-slate-400 mt-2">Continue estudando para desbloquear mais conquistas!</p>
+                        <button onClick={onClose} className="mt-8 w-full py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl font-bold shadow-xl hover:scale-105 transition">CONTINUAR</button>
+                     </div>
+                </div>
+            );
+        }
+
+        // --- Daily Mission Widget ---
+        const DailyMissionWidget = ({ minutesStudied, studyLevel, onClaim, claimed }) => {
+            const config = STUDY_LEVELS[studyLevel] || STUDY_LEVELS['Médio'];
+            const target = config.minutes;
+            const progress = Math.min(100, (minutesStudied / target) * 100);
+            const isComplete = minutesStudied >= target;
+            const xpReward = Math.round(100 * config.xpMultiplier);
+
+            return (
+                <div className={`relative overflow-hidden rounded-2xl p-4 border transition-all max-w-md mx-auto mb-8 ${isComplete ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-700' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'} shadow-sm`}>
+                    <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-lg ${isComplete ? 'bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}>
+                                <i data-lucide="target" className="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Missão Diária ({config.label})</p>
+                                <p className="font-bold text-slate-800 dark:text-white text-sm">Estudar {target} minutos</p>
+                            </div>
+                        </div>
+                        
+                        {isComplete && !claimed ? (
+                            <button onClick={() => onClaim(xpReward)} className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg animate-pulse transition transform hover:scale-105">
+                                Resgatar +{xpReward}XP
+                            </button>
+                        ) : (
+                            <span className={`text-xs font-bold font-mono ${isComplete ? 'text-emerald-500' : 'text-slate-500'}`}>
+                                {minutesStudied}/{target} min
+                            </span>
+                        )}
+                    </div>
+                    
+                    {/* Progress Bar BG */}
+                    <div className="absolute bottom-0 left-0 h-1.5 w-full bg-slate-100 dark:bg-slate-900">
+                        <div className={`h-full ${isComplete ? 'bg-gradient-to-r from-indigo-500 to-purple-500 progress-striped' : 'bg-indigo-500'}`} style={{width: `${progress}%`, transition: 'width 1s ease-out'}}></div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Flashcard = ({ card, onDelete, onMastered }) => {
+            const [isFlipped, setIsFlipped] = useState(false);
+            return (
+                <div className="relative w-full h-64 perspective-1000 group cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
+                     <div className={`w-full h-full duration-500 preserve-3d transition-transform ${isFlipped ? 'rotate-y-180' : ''}`}>
+                         <div className="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-xl transition flex flex-col justify-between">
+                            <div className="flex justify-between items-start">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-white px-2 py-1 rounded" style={{backgroundColor: getColor(card.subject)}}>{card.subject}</span>
+                                <i data-lucide="help-circle" className="w-5 h-5 text-slate-300"></i>
+                            </div>
+                            <div className="text-center my-auto">
+                                <p className="text-lg font-bold text-slate-800 dark:text-white leading-snug line-clamp-4">{card.question}</p>
+                            </div>
+                            <p className="text-xs text-slate-400 text-center mt-2">Toque para ver a resposta</p>
+                         </div>
+                         <div className="absolute w-full h-full backface-hidden bg-indigo-50 dark:bg-slate-900 rounded-2xl p-6 border-2 border-indigo-500 shadow-xl flex flex-col justify-between rotate-y-180">
+                             <div className="flex justify-between w-full">
+                                 <span className="text-xs font-bold text-indigo-500 uppercase">Correção</span>
+                                 <button onClick={(e) => { e.stopPropagation(); onDelete(card.id); }} className="text-rose-400 hover:text-rose-600 p-1"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
+                             </div>
+                             <div className="text-center overflow-y-auto my-2">
+                                <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{card.answer}</p>
+                            </div>
+                            <button onClick={(e) => { e.stopPropagation(); onMastered(card.id); }} className="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-2 transition">
+                                <i data-lucide="check" className="w-3 h-3"></i> Aprendi! (+XP)
+                            </button>
+                         </div>
+                     </div>
+                </div>
+            )
+        };
+
+        const App = () => {
+            // --- State ---
+            const [schedule, setSchedule] = useState([]);
+            const [essays, setEssays] = useState([]);
+            const [simulados, setSimulados] = useState([]); 
+            const [errorNotes, setErrorNotes] = useState([]); 
+            const [history, setHistory] = useState([]);
+            const [weights, setWeights] = useState({});
+            const [grandTotalHours, setGrandTotalHours] = useState(20);
+            const [isDark, setIsDark] = useState(false);
+            
+            const [userProfile, setUserProfile] = useState({ name: 'Estudante', avatar: '🎓', photo: null, theme: 'indigo', streak: 0, lastStudyDate: null, pomoCompleted: 0, totalMinutesStudied: 0, studyLevel: 'Médio' });
+            const [xp, setXp] = useState(0); 
+            const [achievements, setAchievements] = useState([]);
+            const [xpToast, setXpToast] = useState({ visible: false, amount: 0 });
+            
+            // Mission State
+            const [dailyMissionClaimed, setDailyMissionClaimed] = useState(false);
+            const [lastMissionDate, setLastMissionDate] = useState(null);
+
+            // UI State
+            const [activeModal, setActiveModal] = useState(null);
+            const [selectedTask, setSelectedTask] = useState(null);
+            const [addTaskDayIndex, setAddTaskDayIndex] = useState(null);
+            const [currentCalendarDate, setCurrentCalendarDate] = useState(new Date());
+            const [showHelp, setShowHelp] = useState(false);
+            const [showLevelUp, setShowLevelUp] = useState(false);
+            const [expandedSimuladoGroup, setExpandedSimuladoGroup] = useState(null);
+            
+            // Forms
+            const [newTaskForm, setNewTaskForm] = useState({ subject: '', hours: 1, minutes: 0 });
+            const [essayForm, setEssayForm] = useState({ theme: '', genre: '', grade: '' });
+            const [simuladoForm, setSimuladoForm] = useState({ type: 'subject', subjectName: '', contentTopic: '', examName: '', totalQ: '', correctQ: '', notes: '', triScore: '' }); // Added triScore
+            const [editTaskForm, setEditTaskForm] = useState({ subject: '', plannedH: 0, plannedM: 0, studiedH: 0, studiedM: 0 });
+            const [errorNoteForm, setErrorNoteForm] = useState({ subject: '', title: '', description: '' });
+            const [profileForm, setProfileForm] = useState({ name: '', avatar: '', studyLevel: 'Médio' });
+            
+            // Pomodoro
+            const [pomoTime, setPomoTime] = useState(25 * 60);
+            const [pomoActive, setPomoActive] = useState(false);
+            const [pomoMode, setPomoMode] = useState('focus');
+
+            // --- Init ---
+            useEffect(() => {
+                const init = () => {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    let data = null;
+                    if(saved) { try { data = JSON.parse(saved); } catch(e){} }
+                    
+                    const defaultSchedule = [
+                        { day: "Segunda-feira", tasks: [{ id: 1, subject: "Física", planned: 240, studied: 0 }, { id: 2, subject: "Matemática", planned: 160, studied: 0 }, { id: 3, subject: "Química", planned: 270, studied: 0 }] },
+                        { day: "Terça-feira", tasks: [{ id: 4, subject: "Biologia", planned: 270, studied: 0 }, { id: 5, subject: "Português", planned: 180, studied: 0 }, { id: 6, subject: "História", planned: 180, studied: 0 }] },
+                        { day: "Quarta-feira", tasks: [{ id: 7, subject: "Geografia", planned: 240, studied: 0 }, { id: 8, subject: "Redação", planned: 180, studied: 0 }, { id: 9, subject: "Filosofia", planned: 180, studied: 0 }] },
+                        { day: "Quinta-feira", tasks: [{ id: 10, subject: "Física", planned: 240, studied: 0 }, { id: 11, subject: "Matemática", planned: 160, studied: 0 }, { id: 12, subject: "Biologia", planned: 270, studied: 0 }] },
+                        { day: "Sexta-feira", tasks: [{ id: 13, subject: "Química", planned: 270, studied: 0 }, { id: 14, subject: "Inglês", planned: 60, studied: 0 }, { id: 15, subject: "Sociologia", planned: 60, studied: 0 }] },
+                        { day: "Sábado", tasks: [{ id: 16, subject: "Física", planned: 240, studied: 0 }, { id: 17, subject: "Matemática", planned: 160, studied: 0 }, { id: 18, subject: "Revisão", planned: 120, studied: 0 }] },
+                        { day: "Domingo", tasks: [] }
+                    ];
+
+                    if(data && data.schedule && Array.isArray(data.schedule) && data.schedule.length > 0) {
+                        setSchedule(data.schedule);
+                        setEssays(data.essays || []);
+                        setSimulados(data.simulados || []); 
+                        setErrorNotes(data.errorNotes || []); 
+                        setHistory(data.history || []);
+                        setWeights(data.weights || {});
+                        setXp(data.xp || 0);
+                        setAchievements(data.achievements || []);
+                        setUserProfile(data.userProfile || { name: 'Estudante', avatar: '🎓', photo: null, theme: 'indigo', streak: 0, lastStudyDate: null, pomoCompleted: 0, totalMinutesStudied: 0, studyLevel: 'Médio' });
+                        
+                        const todayStr = new Date().toDateString();
+                        if (data.lastMissionDate !== todayStr) {
+                            setDailyMissionClaimed(false);
+                            setLastMissionDate(todayStr);
+                        } else {
+                            setDailyMissionClaimed(data.dailyMissionClaimed || false);
+                            setLastMissionDate(data.lastMissionDate);
+                        }
+
+                    } else {
+                        setSchedule(defaultSchedule);
+                        const w = {};
+                        defaultSchedule.forEach(d => d.tasks.forEach(t => w[t.subject] = 1));
+                        setWeights(w);
+                    }
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) setIsDark(true);
+                };
+                init();
+            }, []);
+
+            useEffect(() => {
+                if(schedule.length > 0) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({ schedule, essays, simulados, errorNotes, history, weights, xp, achievements, userProfile, dailyMissionClaimed, lastMissionDate }));
+                }
+                document.documentElement.classList.toggle('dark', isDark);
+                if(window.lucide) window.lucide.createIcons();
+            }, [schedule, essays, simulados, errorNotes, history, weights, xp, isDark, activeModal, userProfile, achievements, dailyMissionClaimed, lastMissionDate]);
+
+            // --- Logic ---
+            const awardXp = (amount) => { setXp(p => p + amount); setXpToast({ visible: true, amount }); };
+            const getLevel = (p) => Math.floor(Math.sqrt(p / 100)) + 1;
+            
+            const prevLevelRef = useRef(1);
+            useEffect(() => {
+                const cl = getLevel(xp);
+                if (cl > prevLevelRef.current && prevLevelRef.current !== 1) {
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                    setShowLevelUp(true);
+                }
+                prevLevelRef.current = cl;
+            }, [xp]);
+
+            // Check Achievements
+            useEffect(() => {
+                let todayMinutes = 0;
+                schedule.forEach(d => d.tasks.forEach(t => todayMinutes += t.studied));
+                const dataToCheck = { essays, simulados, todayMinutes, totalMinutes: userProfile.totalMinutesStudied + todayMinutes, streak: userProfile.streak, level: getLevel(xp), pomoCompleted: userProfile.pomoCompleted, history, xp, errorNotes, studyLevel: userProfile.studyLevel };
+                const newUnlocked = [];
+                ACHIEVEMENTS_LIST.forEach(ach => {
+                    if (!achievements.includes(ach.id)) {
+                        if (ach.req && ach.req(dataToCheck)) newUnlocked.push(ach.id);
+                    }
+                });
+                if (newUnlocked.length > 0) {
+                    setAchievements([...achievements, ...newUnlocked]);
+                    newUnlocked.forEach(id => {
+                        const ach = ACHIEVEMENTS_LIST.find(a => a.id === id);
+                        awardXp(ach.xp);
+                        alert(`🏆 Conquista Desbloqueada: ${ach.title}!`);
+                        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+                    });
+                }
+            }, [schedule, essays, simulados, xp, userProfile, history, errorNotes]);
+
+            // Pomodoro
+            useEffect(() => {
+                let interval = null;
+                if (pomoActive && pomoTime > 0) {
+                    interval = setInterval(() => setPomoTime(t => t - 1), 1000);
+                } else if (pomoTime === 0) {
+                    setPomoActive(false);
+                    new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg').play().catch(()=>{});
+                    if(pomoMode === 'focus') {
+                        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                        awardXp(50);
+                        setUserProfile(prev => ({...prev, pomoCompleted: (prev.pomoCompleted || 0) + 1}));
+                        alert("Pomodoro concluído! +50 XP");
+                    }
+                }
+                return () => clearInterval(interval);
+            }, [pomoActive, pomoTime, pomoMode]);
+
+            const togglePomodoro = () => setPomoActive(!pomoActive);
+            const resetPomodoro = (mode = 'focus') => {
+                setPomoActive(false);
+                setPomoMode(mode);
+                setPomoTime(mode === 'focus' ? 25 * 60 : 5 * 60);
+            };
+
+            // --- Handlers ---
+            
+            const handleClaimDailyMission = (xpReward) => {
+                awardXp(xpReward);
+                setDailyMissionClaimed(true);
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.3 } });
+            };
+
+            const openEditTaskModal = (dayIdx, taskIdx, task) => {
+                setSelectedTask({ ...task, dIdx: dayIdx, tIdx: taskIdx });
+                setEditTaskForm({
+                    subject: task.subject,
+                    plannedH: Math.floor(task.planned / 60),
+                    plannedM: task.planned % 60,
+                    studiedH: Math.floor(task.studied / 60),
+                    studiedM: task.studied % 60
+                });
+                setActiveModal('task');
+            };
+
+            const handleSaveTaskEdit = (e) => {
+                e.preventDefault();
+                const newName = editTaskForm.subject;
+                const planned = (parseInt(editTaskForm.plannedH)||0)*60 + (parseInt(editTaskForm.plannedM)||0);
+                const studied = (parseInt(editTaskForm.studiedH)||0)*60 + (parseInt(editTaskForm.studiedM)||0);
+                const { dIdx, tIdx, subject: oldName } = selectedTask;
+
+                const diff = studied - selectedTask.studied;
+                if(diff > 0) {
+                    awardXp(diff);
+                    setUserProfile(prev => ({...prev, totalMinutesStudied: prev.totalMinutesStudied + diff}));
+                    const today = new Date().toDateString();
+                    if (userProfile.lastStudyDate !== today) {
+                        const yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        if (userProfile.lastStudyDate === yesterday.toDateString()) {
+                            setUserProfile(prev => ({ ...prev, streak: prev.streak + 1, lastStudyDate: today }));
+                        } else {
+                            setUserProfile(prev => ({ ...prev, streak: 1, lastStudyDate: today }));
+                        }
+                    }
+                }
+
+                setSchedule(prev => {
+                    const next = [...prev];
+                    next[dIdx].tasks[tIdx] = { ...next[dIdx].tasks[tIdx], subject: newName, planned, studied };
+                    if(newName !== oldName && confirm(`Renomear todas as ocorrências de "${oldName}" para "${newName}"?`)) {
+                         next.forEach(d => d.tasks.forEach(t => { if(t.subject === oldName) t.subject = newName; }));
+                         setWeights(w => { const nw={...w}; if(nw[oldName]){nw[newName]=nw[oldName]; delete nw[oldName]} else{nw[newName]=1} return nw; });
+                    }
+                    return next;
+                });
+                setActiveModal(null);
+            };
+
+            const handleProfileUpdate = (e) => {
+                e.preventDefault();
+                setUserProfile({ ...userProfile, name: profileForm.name, avatar: profileForm.avatar, studyLevel: profileForm.studyLevel });
+                setActiveModal(null);
+            };
+
+            const handlePhotoUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setUserProfile(prev => ({ ...prev, photo: reader.result }));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const handleThemeChange = (themeKey) => setUserProfile({...userProfile, theme: themeKey});
+            
+            const deleteTask = (dayIndex, taskId) => {
+                if(confirm("Remover esta matéria do dia?")) {
+                    setSchedule(prev => prev.map((day, idx) => {
+                        if(idx !== dayIndex) return day;
+                        return { ...day, tasks: day.tasks.filter(t => t.id !== taskId) };
+                    }));
+                }
+            };
+
+            const handleAddTask = () => {
+                if(!newTaskForm.subject) return alert("Digite o nome da matéria");
+                const minutes = (parseInt(newTaskForm.hours)||0)*60 + (parseInt(newTaskForm.minutes)||0);
+                setSchedule(prev => prev.map((day, idx) => {
+                    if(idx !== addTaskDayIndex) return day;
+                    return { ...day, tasks: [...day.tasks, { id: Date.now(), subject: newTaskForm.subject, planned: minutes, studied: 0 }] };
+                }));
+                setWeights(prev => ({...prev, [newTaskForm.subject]: prev[newTaskForm.subject] || 1}));
+                setActiveModal(null);
+                setNewTaskForm({subject:'', hours:1, minutes:0});
+            };
+
+            const distributeHours = () => {
+                 const totalMinutes = grandTotalHours * 60;
+                 if(totalMinutes <= 0) return;
+                 let totalPoints = 0;
+                 Object.values(weights).forEach(w => totalPoints += w);
+                 if(totalPoints === 0) totalPoints = 1;
+                 const minsPerPoint = totalMinutes / totalPoints;
+                 const subjectTotals = {};
+                 Object.keys(weights).forEach(s => subjectTotals[s] = weights[s] * minsPerPoint);
+
+                 setSchedule(prev => prev.map(day => ({
+                     ...day,
+                     tasks: day.tasks.map(task => {
+                         let occurrences = 0;
+                         prev.forEach(d => d.tasks.forEach(tk => { if(tk.subject === task.subject) occurrences++; }));
+                         if(occurrences === 0) occurrences = 1;
+                         const subjectTotal = subjectTotals[task.subject] || 0;
+                         return { ...task, planned: Math.floor(subjectTotal / occurrences) };
+                     })
+                 })));
+                 setActiveModal(null);
+                 alert("Horas redistribuídas!");
+            };
+
+            const finishWeek = (note) => {
+                let p = 0, s = 0;
+                schedule.forEach(d => d.tasks.forEach(t => { p += t.planned; s += t.studied; }));
+                const entry = { id: Date.now(), dateISO: new Date().toISOString(), weekRange: "Semana Concluída", note, percent: p > 0 ? Math.round((s/p)*100) : 0, planned: p, studied: s };
+                setHistory([entry, ...history]);
+                setSchedule(prev => prev.map(d => ({ ...d, tasks: d.tasks.map(t => ({ ...t, studied: 0 })) })));
+                setActiveModal('history');
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+                awardXp(200);
+            };
+
+            const handleAddEssay = (e) => {
+                e.preventDefault();
+                if(!essayForm.theme || !essayForm.grade) return alert("Preencha tema e nota");
+                setEssays([{ id: Date.now(), theme: essayForm.theme, genre: essayForm.genre || 'Geral', grade: parseInt(essayForm.grade), date: new Date().toLocaleDateString('pt-BR') }, ...essays]);
+                setEssayForm({theme:'', genre:'', grade:''});
+                setActiveModal(null);
+                awardXp(50);
+            };
+            const deleteEssay = (id) => { if(confirm("Apagar redação?")) setEssays(essays.filter(e => e.id !== id)); };
+
+            const handleAddSimulado = (e) => {
+                e.preventDefault();
+                if(!simuladoForm.totalQ || !simuladoForm.correctQ) return alert("Preencha dados");
+                let title = "", subtitle = "";
+                let tri = null;
+
+                if(simuladoForm.type === 'subject') { 
+                    title = simuladoForm.subjectName; 
+                    subtitle = simuladoForm.contentTopic || "Conteúdo Geral"; 
+                } else { 
+                    title = simuladoForm.examName; 
+                    subtitle = simuladoForm.subjectName || "Prova Completa"; 
+                    if(simuladoForm.triScore) tri = parseFloat(simuladoForm.triScore);
+                }
+
+                const total = parseInt(simuladoForm.totalQ);
+                const correct = parseInt(simuladoForm.correctQ);
+                const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+                setSimulados([{ id: Date.now(), type: simuladoForm.type, title, subtitle, total, correct, percentage, notes: simuladoForm.notes, triScore: tri, date: new Date().toLocaleDateString('pt-BR') }, ...simulados]);
+                setSimuladoForm({ type: 'subject', subjectName: '', contentTopic: '', examName: '', totalQ: '', correctQ: '', notes: '', triScore: '' });
+                setActiveModal(null);
+                awardXp(100);
+                confetti({ particleCount: 50, spread: 60 });
+            };
+
+            const deleteSimulado = (id) => { if(confirm("Apagar simulado?")) setSimulados(simulados.filter(s => s.id !== id)); };
+            const deleteSimuladoGroup = (title) => {
+                if(confirm(`Tem certeza que deseja apagar TODOS os simulados do grupo "${title}"?`)) {
+                    setSimulados(simulados.filter(s => s.title !== title));
+                }
+            };
+
+            const handleAddErrorNote = (e) => {
+                e.preventDefault();
+                if(!errorNoteForm.subject || !errorNoteForm.description) return alert("Preencha todos os campos!");
+                setErrorNotes([{ id: Date.now(), ...errorNoteForm, date: new Date().toLocaleDateString('pt-BR') }, ...errorNotes]);
+                setErrorNoteForm({ subject: '', title: '', description: '' });
+                setActiveModal(null);
+                awardXp(20);
+            };
+            const deleteErrorNote = (id) => { if(confirm("Remover anotação?")) setErrorNotes(errorNotes.filter(c => c.id !== id)); };
+
+            // Drag Helpers
+            const handleDragStart = (e, dIdx, tIdx) => { e.dataTransfer.setData("task", JSON.stringify({ dIdx, tIdx })); e.currentTarget.classList.add('opacity-50'); };
+            const handleDragEnd = (e) => e.target.classList.remove('opacity-50');
+            const handleDragOver = (e) => e.preventDefault();
+            const handleDrop = (e, targetDIdx) => {
+                e.preventDefault();
+                const data = e.dataTransfer.getData("task");
+                if(!data) return;
+                const { dIdx, tIdx } = JSON.parse(data);
+                if(dIdx === targetDIdx) return;
+                setSchedule(prev => {
+                    const next = prev.map(d => ({...d, tasks: [...d.tasks]}));
+                    const [task] = next[dIdx].tasks.splice(tIdx, 1);
+                    next[targetDIdx].tasks.push(task);
+                    return next;
+                });
+            };
+            const getCalendarDays = () => {
+                const y = currentCalendarDate.getFullYear();
+                const m = currentCalendarDate.getMonth();
+                const first = new Date(y, m, 1).getDay();
+                const daysInMonth = new Date(y, m+1, 0).getDate();
+                const days = [];
+                for(let i=0; i<first; i++) days.push(null);
+                for(let i=1; i<=daysInMonth; i++) days.push(i);
+                return days;
+            };
+            const changeMonth = (offset) => setCurrentCalendarDate(new Date(currentCalendarDate.setMonth(currentCalendarDate.getMonth() + offset)));
+
+            // --- Render Helpers ---
+            const activeTheme = THEMES[userProfile.theme] || THEMES.indigo;
+            const currentLevel = getLevel(xp);
+            const nextLevelXp = 100 * Math.pow(currentLevel, 2);
+            const prevLevelXp = 100 * Math.pow(currentLevel - 1, 2);
+            const levelProgress = Math.min(100, Math.max(0, ((xp - prevLevelXp) / (nextLevelXp - prevLevelXp)) * 100)) || 0;
+            const timeBank = useMemo(() => { let p=0,s=0; schedule.forEach(d=>d.tasks.forEach(t=>{p+=t.planned;s+=t.studied})); return s-p; }, [schedule]);
+            const pendingSubjects = useMemo(() => {
+                const totals={};
+                schedule.forEach(d=>d.tasks.forEach(t=>{ if(!totals[t.subject])totals[t.subject]={r:0,c:getColor(t.subject)}; totals[t.subject].r+=(t.planned-t.studied); }));
+                return Object.entries(totals).map(([s,v])=>({subject:s,color:v.c,remaining:v.r})).filter(x=>x.remaining>0).sort((a,b)=>b.remaining-a.remaining);
+            }, [schedule]);
+            const essayAvg = essays.length > 0 ? Math.round(essays.reduce((a,b)=>a+b.grade,0)/essays.length) : 0;
+            const simuladoAvg = simulados.length > 0 ? Math.round(simulados.reduce((a,b)=>a+b.percentage,0)/simulados.length) : 0;
+            const groupedSimulados = useMemo(() => {
+                const groups = {};
+                simulados.forEach(sim => {
+                    const key = sim.title;
+                    if(!groups[key]) groups[key] = { title: key, count: 0, totalPercent: 0, items: [] };
+                    groups[key].count++;
+                    groups[key].totalPercent += sim.percentage;
+                    groups[key].items.push(sim);
+                });
+                return Object.values(groups).map(g => ({...g, avg: Math.round(g.totalPercent / g.count)}));
+            }, [simulados]);
+
+            // Daily Mission Calculation
+            let todaysMinutes = 0;
+            schedule.forEach(d => d.tasks.forEach(t => todaysMinutes += t.studied));
+            
+            return (
+                <div className={`container mx-auto px-4 py-8 md:py-12 max-w-7xl pb-32 ${activeTheme.class}`}>
+                    
+                    <LevelUpModal isOpen={showLevelUp} onClose={() => setShowLevelUp(false)} level={currentLevel} />
+                    <XpToast xp={xpToast.amount} visible={xpToast.visible} onEnd={() => setXpToast({ ...xpToast, visible: false })} />
+
+                    {/* Header */}
+                    <header className="text-center mb-10 md:mb-16">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                             {/* Profile & Level */}
+                             <button onClick={() => { setProfileForm({name: userProfile.name, avatar: userProfile.avatar, studyLevel: userProfile.studyLevel}); setActiveModal('profile'); }} 
+                                className="flex items-center gap-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-sm border border-white/50 dark:border-slate-700/50 w-full md:w-auto justify-center md:justify-start hover:scale-105 transition cursor-pointer group">
+                                 <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 overflow-hidden flex items-center justify-center text-2xl shadow-inner">
+                                     {userProfile.photo ? <img src={userProfile.photo} alt="Avatar" className="w-full h-full object-cover" /> : userProfile.avatar}
+                                 </div>
+                                 <div className="text-left flex-1">
+                                     <div className="flex justify-between items-baseline mb-1 gap-4">
+                                         <span className="text-sm font-bold text-slate-800 dark:text-white">{userProfile.name}</span>
+                                         <span className={`text-[10px] font-bold ${activeTheme.class}`}>{Math.round(xp)} XP</span>
+                                     </div>
+                                     <div className="w-24 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                         <div className={`h-full bg-gradient-to-r ${activeTheme.from} ${activeTheme.to} transition-all duration-500`} style={{width: `${levelProgress}%`}}></div>
+                                     </div>
+                                     <span className="text-[10px] text-slate-400 font-bold mt-1 block">Nível {currentLevel} • {userProfile.studyLevel}</span>
+                                 </div>
+                             </button>
+                             
+                             <div className="flex gap-2 w-full md:w-auto justify-center flex-wrap">
+                                 <button onClick={() => setActiveModal('achievements')} className={`flex-1 md:flex-none justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm border border-slate-200 dark:border-slate-700 hover:border-yellow-400 transition hover:-translate-y-0.5 flex items-center gap-2`}>
+                                    <i data-lucide="medal" className="w-4 h-4 text-yellow-500"></i> <span className="hidden sm:inline">Conquistas</span>
+                                </button>
+                                <button onClick={() => setActiveModal('errors')} className="flex-1 md:flex-none justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm border border-slate-200 hover:border-rose-400 transition flex items-center gap-2">
+                                    <i data-lucide="book-x" className="w-4 h-4 text-rose-500"></i> <span className="hidden sm:inline">Erros</span>
+                                </button>
+                                <button onClick={() => setActiveModal('pomodoro')} className={`flex-1 md:flex-none justify-center ${activeTheme.bg} text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition flex items-center gap-2 transform hover:-translate-y-0.5 opacity-90 hover:opacity-100`}>
+                                    <i data-lucide="timer" className="w-4 h-4"></i> <span className="hidden sm:inline">Foco</span>
+                                </button>
+                                 <button onClick={() => setActiveModal('settings')} className="flex-1 md:flex-none justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm border border-slate-200 dark:border-slate-700 hover:border-indigo-300 transition hover:-translate-y-0.5 flex items-center gap-2">
+                                    <i data-lucide="sliders-horizontal" className="w-4 h-4 text-indigo-500"></i> <span className="hidden sm:inline">Metas</span>
+                                </button>
+                             </div>
+                        </div>
+
+                        {/* Daily Mission Widget */}
+                        <DailyMissionWidget 
+                            minutesStudied={todaysMinutes}
+                            studyLevel={userProfile.studyLevel}
+                            onClaim={handleClaimDailyMission}
+                            claimed={dailyMissionClaimed}
+                        />
+                        
+                        <h1 className="text-4xl md:text-7xl font-display font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+                             {getGreeting()}, <span className={`text-transparent bg-clip-text bg-gradient-to-r ${activeTheme.from} ${activeTheme.to}`}>{userProfile.name}</span>
+                        </h1>
+                    </header>
+
+                    {/* Time Bank Responsive */}
+                    <div className="glass-card rounded-[2rem] p-6 md:p-8 text-center mb-16 transform hover:scale-[1.01] transition duration-500">
+                        <h2 className="text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Saldo Semanal</h2>
+                        <div className={`text-5xl md:text-7xl font-display font-black tracking-tighter ${timeBank >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                            {formatTime(Math.abs(timeBank))}
+                            <span className="text-lg md:text-xl ml-2 text-slate-400 font-medium block md:inline">{timeBank >= 0 ? 'EXTRA' : 'FALTA'}</span>
+                        </div>
+                    </div>
+
+                    {/* Schedule Grid Responsive */}
+                    <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8">
+                        {schedule.map((day, dIdx) => (
+                            <div key={dIdx} 
+                                 onDragOver={(e) => e.preventDefault()}
+                                 onDrop={(e) => handleDrop(e, dIdx)}
+                                 className="glass-card rounded-[2rem] p-5 md:p-6 min-h-[250px] flex flex-col transition-colors duration-300">
+                                <div className={`flex justify-between items-center mb-4 pl-2 border-l-4 ${activeTheme.border}`}>
+                                    <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-white">{day.day}</h2>
+                                    <span className={`bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded-lg`}>{day.tasks.length}</span>
+                                </div>
+                                
+                                <div className="space-y-3 flex-grow">
+                                    {day.tasks.map((task, tIdx) => {
+                                        const color = getColor(task.subject);
+                                        const isDone = task.planned > 0 && task.studied >= task.planned;
+                                        return (
+                                            <div key={task.id} 
+                                                 draggable onDragStart={(e) => handleDragStart(e, dIdx, tIdx)} onDragEnd={handleDragEnd}
+                                                 onClick={() => openEditTaskModal(dIdx, tIdx, task)}
+                                                 className={`group relative bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-transparent hover:border-indigo-200 dark:hover:border-slate-600 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-4 overflow-hidden ${isDone ? 'opacity-75' : ''}`}>
+                                                <div className={`w-1.5 absolute left-0 top-0 bottom-0 rounded-l-xl ${isDone ? 'bg-emerald-500' : ''}`} style={{backgroundColor: isDone ? undefined : color}}></div>
+                                                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm" style={{backgroundColor: color}}>
+                                                    {task.subject.charAt(0)}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-bold text-slate-800 dark:text-slate-100 truncate text-sm md:text-base">{task.subject}</h4>
+                                                    <div className="flex justify-between text-xs text-slate-500 mt-1">
+                                                        <span>Meta: {formatTime(task.planned)}</span>
+                                                        {isDone && <span className="text-emerald-500 font-bold flex items-center gap-1"><i data-lucide="check" className="w-3 h-3"></i> Feito!</span>}
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); deleteTask(dIdx, task.id); }}
+                                                    className="delete-btn p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition md:opacity-0 md:group-hover:opacity-100 z-10"
+                                                >
+                                                    <i data-lucide="trash-2" className="w-4 h-4"></i>
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                    {day.tasks.length === 0 && <div className="h-24 flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 text-xs font-bold uppercase tracking-widest opacity-50">Vazio</div>}
+                                </div>
+                                <button onClick={() => { setAddTaskDayIndex(dIdx); setActiveModal('add_task'); }} className={`mt-4 w-full py-3 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-400 hover:text-indigo-500 font-bold hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition flex items-center justify-center gap-2`}>
+                                    <i data-lucide="plus" className="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        ))}
+                    </main>
+
+                    {/* Pendências & Redações */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+                        {/* Pendências */}
+                        <div className="glass-card rounded-[2rem] p-6 md:p-8 border-t-4 border-rose-500 h-fit">
+                             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200/60 dark:border-slate-700/60">
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">Pendências</h2>
+                                <span className="text-[10px] md:text-xs font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300 px-3 py-1 rounded-full uppercase tracking-widest">Atenção</span>
+                            </div>
+                            <div className="space-y-3">
+                                {pendingSubjects.length === 0 ? <div className="text-center text-emerald-500 font-bold py-8 flex flex-col items-center gap-2"><i data-lucide="party-popper" className="w-8 h-8"></i>Parabéns! Tudo completo.</div> : pendingSubjects.map((item, i) => (
+                                    <div key={i} className="flex justify-between items-center p-4 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-1.5 h-8 rounded-full" style={{backgroundColor: item.color}}></div>
+                                            <h4 className="font-bold text-slate-700 dark:text-white text-sm md:text-base">{item.subject}</h4>
+                                        </div>
+                                        <span className={`font-black ${activeTheme.class}`}>{formatTime(item.remaining)}</span>
+                                    </div>
+                                ))}
+                             </div>
+                        </div>
+
+                        {/* Redações */}
+                        <div className={`glass-card rounded-[2rem] p-6 md:p-8 border-t-4 ${activeTheme.border} h-fit`}>
+                            <div className="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">Redações</h3>
+                                    <span className={`text-xs font-bold block mt-1 ${activeTheme.class}`}>Média: {essayAvg}</span>
+                                </div>
+                                <button onClick={() => setActiveModal('essay')} className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-xl font-bold text-xs shadow-lg hover:scale-105 transition flex items-center gap-2">
+                                    <i data-lucide="pen-tool" className="w-3 h-3"></i> Nova
+                                </button>
+                            </div>
+                            <div className="space-y-3">
+                                {essays.length === 0 && <p className="text-slate-400 text-center py-6 italic">Nenhuma redação registrada.</p>}
+                                {essays.map(essay => (
+                                    <div key={essay.id} className="flex justify-between items-center p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-indigo-200 transition group">
+                                        <div className="min-w-0 mr-2">
+                                            <h4 className="font-bold text-slate-800 dark:text-white truncate text-sm md:text-base">{essay.theme}</h4>
+                                            <p className="text-xs text-slate-400">{essay.genre}</p>
+                                        </div>
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <span className={`text-lg font-black ${essay.grade >= 900 ? 'text-emerald-500' : 'text-indigo-600'}`}>{essay.grade}</span>
+                                            <button onClick={() => deleteEssay(essay.id)} className="text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" className="w-3 h-3"></i></button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                     {/* Simulados (AGRUPADOS) */}
+                     <div className="glass-card rounded-[2rem] p-6 md:p-8 mt-12 border-t-4 border-purple-500 h-fit">
+                        <div className="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">Simulados</h3>
+                                <span className="text-xs text-purple-500 font-bold block mt-1">Média Geral: {simuladoAvg}%</span>
+                            </div>
+                            <button onClick={() => setActiveModal('simulado')} className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-xl font-bold text-xs shadow-lg hover:scale-105 transition flex items-center gap-2">
+                                <i data-lucide="clipboard-list" className="w-3 h-3"></i> Novo
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            {simulados.length === 0 && <p className="text-slate-400 text-center py-6 italic">Nenhum simulado registrado.</p>}
+                            
+                            {groupedSimulados.map(group => (
+                                <div key={group.title} className="bg-white dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                                    <div 
+                                        onClick={() => setExpandedSimuladoGroup(expandedSimuladoGroup === group.title ? null : group.title)}
+                                        className="p-4 flex justify-between items-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-lg text-purple-600 dark:text-purple-400 font-bold text-sm">
+                                                {group.count}
+                                            </div>
+                                            <h4 className="font-bold text-slate-800 dark:text-white text-lg">{group.title}</h4>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right hidden sm:block">
+                                                <span className="text-xs text-slate-400 uppercase font-bold block">Média</span>
+                                                <span className={`font-bold ${group.avg >= 80 ? 'text-emerald-500' : 'text-slate-700 dark:text-slate-300'}`}>{group.avg}%</span>
+                                            </div>
+                                            
+                                            {/* Group Delete Button */}
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); deleteSimuladoGroup(group.title); }}
+                                                className="p-2 text-slate-300 hover:text-rose-500 transition"
+                                                title="Apagar Grupo"
+                                            >
+                                                <i data-lucide="trash-2" className="w-4 h-4"></i>
+                                            </button>
+
+                                            <i data-lucide="chevron-down" className={`w-5 h-5 text-slate-400 transition-transform ${expandedSimuladoGroup === group.title ? 'rotate-180' : ''}`}></i>
+                                        </div>
+                                    </div>
+                                    
+                                    {expandedSimuladoGroup === group.title && (
+                                        <div className="border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 p-4 space-y-3 animate-fade-in">
+                                            {group.items.map(sim => (
+                                                <div key={sim.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+                                                    <div>
+                                                        <p className="text-xs text-slate-400 mb-0.5">{sim.date} • {sim.type === 'exam' ? 'Prova' : 'Matéria'}</p>
+                                                        <p className="font-bold text-slate-700 dark:text-slate-200">{sim.subtitle}</p>
+                                                        {sim.type === 'exam' && sim.triScore && <span className="inline-block mt-1 px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded">TRI: {sim.triScore}</span>}
+                                                        {sim.notes && <p className="text-xs text-slate-500 italic mt-1">"{sim.notes}"</p>}
+                                                    </div>
+                                                    <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                                                        <div className="text-right">
+                                                             <span className={`text-lg font-black ${sim.percentage >= 80 ? 'text-emerald-500' : 'text-purple-500'}`}>{sim.percentage}%</span>
+                                                             <p className="text-[10px] text-slate-400 uppercase">{sim.correct}/{sim.total}</p>
+                                                        </div>
+                                                        <button onClick={() => deleteSimulado(sim.id)} className="text-slate-300 hover:text-rose-500"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Hero Footer Button - STATIC POSITION */}
+                    <div className="flex justify-center mt-24 mb-12">
+                        <button onClick={() => setActiveModal('finish')} className="group relative inline-flex items-center justify-center px-12 py-6 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto max-w-md">
+                            <span className="text-lg font-black text-white tracking-wide mr-2">CONCLUIR SEMANA</span>
+                            <i data-lucide="check-circle-2" className="w-8 h-8 text-white/80 animate-bounce"></i>
+                        </button>
+                    </div>
+
+                    {/* --- MODALS --- */}
+
+                     {/* Profile Modal */}
+                     <Modal isOpen={activeModal === 'profile'} onClose={() => setActiveModal(null)} title="Perfil do Estudante">
+                        <form onSubmit={handleProfileUpdate} className="space-y-6">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Seu Nome</label>
+                                <input value={profileForm.name} onChange={e => setProfileForm({...profileForm, name: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold" />
+                            </div>
+                             <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Avatar (Emoji)</label>
+                                <input value={profileForm.avatar} onChange={e => setProfileForm({...profileForm, avatar: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-center text-2xl" maxLength="2" />
+                            </div>
+                             <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Nível de Estudo</label>
+                                <div className="flex flex-wrap gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                    {Object.keys(STUDY_LEVELS).map(lvl => (
+                                        <button 
+                                            type="button"
+                                            key={lvl}
+                                            onClick={() => setProfileForm({...profileForm, studyLevel: lvl})}
+                                            className={`flex-1 py-2 px-2 rounded-lg text-[10px] font-bold transition ${profileForm.studyLevel === lvl ? 'bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-white' : 'text-slate-500'}`}
+                                        >
+                                            {STUDY_LEVELS[lvl].icon} {lvl}
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="text-xs text-slate-400 mt-2 text-center">
+                                    Meta Diária: {STUDY_LEVELS[profileForm.studyLevel]?.minutes} min • XP: x{STUDY_LEVELS[profileForm.studyLevel]?.xpMultiplier}
+                                </p>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Foto de Perfil (Opcional)</label>
+                                <input type="file" accept="image/*" onChange={handlePhotoUpload} className="w-full p-2 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-3 uppercase">Tema de Cores</label>
+                                <div className="flex gap-3 justify-center flex-wrap">
+                                    {Object.entries(THEMES).map(([key, theme]) => (
+                                        <button key={key} type="button" onClick={() => handleThemeChange(key)} className={`w-10 h-10 rounded-full ${theme.bg} border-2 ${userProfile.theme === key ? 'border-white ring-2 ring-slate-300' : 'border-transparent'} transition transform hover:scale-110`}></button>
+                                    ))}
+                                </div>
+                            </div>
+                            <button type="submit" className={`w-full py-3 rounded-xl font-bold text-white ${activeTheme.bg} shadow-lg`}>Salvar Perfil</button>
+                        </form>
+                    </Modal>
+
+                    {/* Achievements Modal */}
+                    <Modal isOpen={activeModal === 'achievements'} onClose={() => setActiveModal(null)} title="Galeria de Conquistas" className="max-w-3xl">
+                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {ACHIEVEMENTS_LIST.map(ach => {
+                                const isUnlocked = achievements.includes(ach.id);
+                                return (
+                                    <div key={ach.id} className={`relative overflow-hidden p-5 rounded-2xl border transition-all duration-300 achievement-card ${isUnlocked ? 'bg-white dark:bg-slate-800 border-transparent shadow-lg scale-[1.02]' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 achievement-locked'}`}>
+                                        {isUnlocked && <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${ach.gradient.replace('linear-gradient(135deg, ', '').replace(')', '')}`}></div>}
+                                        <div className="relative z-10 flex items-start gap-4">
+                                            <div className={`p-3 rounded-xl shadow-inner text-white`} style={{background: ach.gradient}}>
+                                                <i data-lucide={ach.icon} className="w-6 h-6"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-slate-800 dark:text-white text-base mb-1">{ach.title}</h4>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-2">{ach.desc}</p>
+                                                <span className={`text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider ${isUnlocked ? 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300' : 'bg-slate-200 text-slate-400'}`}>{ach.xp} XP</span>
+                                            </div>
+                                        </div>
+                                        {isUnlocked && <div className="absolute top-2 right-2 text-emerald-500"><i data-lucide="check-circle" className="w-4 h-4"></i></div>}
+                                    </div>
+                                );
+                            })}
+                         </div>
+                    </Modal>
+
+                    {/* Error Notebook Modal */}
+                    <Modal isOpen={activeModal === 'errors'} onClose={() => setActiveModal(null)} title="Caderno de Erros" className="max-w-4xl">
+                         <div className="flex flex-col md:flex-row gap-8 h-[65vh]">
+                             <div className="w-full md:w-1/3 bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl h-fit border border-slate-100 dark:border-slate-700">
+                                <h4 className="font-bold text-slate-700 dark:text-white mb-3 text-sm uppercase">Novo Registro</h4>
+                                <form onSubmit={handleAddErrorNote} className="space-y-3">
+                                    <input placeholder="Matéria (ex: Matemática)" value={errorNoteForm.subject} onChange={e => setErrorNoteForm({...errorNoteForm, subject: e.target.value})} className="w-full p-2.5 bg-white dark:bg-slate-900 rounded-lg text-sm border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 ring-indigo-500" />
+                                    <input placeholder="Assunto/Título" value={errorNoteForm.title} onChange={e => setErrorNoteForm({...errorNoteForm, title: e.target.value})} className="w-full p-2.5 bg-white dark:bg-slate-900 rounded-lg text-sm border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 ring-indigo-500" />
+                                    <textarea placeholder="O que eu errei? O que aprendi?" value={errorNoteForm.description} onChange={e => setErrorNoteForm({...errorNoteForm, description: e.target.value})} className="w-full p-2.5 bg-white dark:bg-slate-900 rounded-lg text-sm border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 ring-indigo-500 h-32 resize-none"></textarea>
+                                    <button type="submit" className={`w-full py-2.5 ${activeTheme.bg} text-white rounded-lg font-bold shadow-md hover:opacity-90`}>Adicionar Nota</button>
+                                </form>
+                             </div>
+                             <div className="w-full md:w-2/3 overflow-y-auto p-1">
+                                {errorNotes.length === 0 ? (
+                                    <div className="h-full flex flex-col items-center justify-center text-slate-400 opacity-50"><i data-lucide="book-open" className="w-12 h-12 mb-2"></i><p>Caderno vazio.</p></div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {errorNotes.map(note => (
+                                            <div key={note.id} className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm relative group hover:border-indigo-200 transition">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div>
+                                                        <span className="text-[10px] font-bold uppercase text-white px-2 py-1 rounded mb-1 inline-block" style={{backgroundColor: getColor(note.subject)}}>{note.subject}</span>
+                                                        <h4 className="font-bold text-slate-800 dark:text-white text-base">{note.title}</h4>
+                                                    </div>
+                                                    <span className="text-[10px] text-slate-400">{note.date}</span>
+                                                </div>
+                                                <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{note.description}</p>
+                                                <button onClick={() => deleteErrorNote(note.id)} className="absolute top-4 right-4 text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                             </div>
+                         </div>
+                    </Modal>
+
+                    {/* Edit Task Modal */}
+                    <Modal isOpen={activeModal === 'task'} onClose={() => setActiveModal(null)} title="Editar Matéria">
+                        {selectedTask && (
+                            <form onSubmit={handleSaveTaskEdit} className="space-y-6">
+                                <div className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl text-center">
+                                    <label className="text-xs font-bold text-slate-400 uppercase block mb-2">Nome da Matéria</label>
+                                    <input name="subject" defaultValue={selectedTask.subject} className={`w-full bg-transparent text-center text-3xl font-black ${activeTheme.class} outline-none border-b-2 border-transparent hover:border-indigo-300 focus:border-indigo-500 transition`} />
+                                </div>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="font-bold text-slate-500 mb-2 block">Planejado</label>
+                                        <div className="flex gap-2">
+                                            <input type="number" value={editTaskForm.plannedH} onChange={e => setEditTaskForm({...editTaskForm, plannedH: e.target.value})} className="w-full p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold outline-none" placeholder="H" />
+                                            <input type="number" value={editTaskForm.plannedM} onChange={e => setEditTaskForm({...editTaskForm, plannedM: e.target.value})} className="w-full p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold outline-none" placeholder="M" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="font-bold text-slate-500 mb-2 block">Estudado</label>
+                                        <div className="flex gap-2">
+                                            <input type="number" value={editTaskForm.studiedH} onChange={e => setEditTaskForm({...editTaskForm, studiedH: e.target.value})} className="w-full p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold outline-none" placeholder="H" />
+                                            <input type="number" value={editTaskForm.studiedM} onChange={e => setEditTaskForm({...editTaskForm, studiedM: e.target.value})} className="w-full p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold outline-none" placeholder="M" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" className={`w-full py-4 ${activeTheme.bg} text-white rounded-xl font-bold shadow-lg transition hover:scale-[1.02]`}>Salvar Alterações</button>
+                            </form>
+                        )}
+                    </Modal>
+
+                    {/* Add Task */}
+                    <Modal isOpen={activeModal === 'add_task'} onClose={() => setActiveModal(null)} title="Adicionar Matéria">
+                        <div className="space-y-6">
+                            <div>
+                                <label className="font-bold text-slate-500 mb-2 block">Nome da Matéria</label>
+                                <input 
+                                    value={newTaskForm.subject} onChange={e => setNewTaskForm({...newTaskForm, subject: e.target.value})}
+                                    className="w-full p-4 text-lg font-bold bg-slate-50 dark:bg-slate-800 rounded-xl outline-none border border-slate-200 dark:border-slate-700 focus:border-indigo-500" 
+                                    placeholder="Ex: Programação, Yoga..." 
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center gap-2">
+                                    <input type="number" min="0" value={newTaskForm.hours} onChange={e => setNewTaskForm({...newTaskForm, hours: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 font-bold outline-none" /><span className="font-bold">H</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <input type="number" min="0" max="59" value={newTaskForm.minutes} onChange={e => setNewTaskForm({...newTaskForm, minutes: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 font-bold outline-none" /><span className="font-bold">Min</span>
+                                </div>
+                            </div>
+                            <button onClick={handleAddTask} className={`w-full py-4 ${activeTheme.bg} text-white rounded-xl font-bold shadow-lg hover:opacity-90`}>Adicionar ao Dia</button>
+                        </div>
+                    </Modal>
+
+                    {/* Settings (Weights) */}
+                    <Modal isOpen={activeModal === 'settings'} onClose={() => setActiveModal(null)} title="Configurar Pesos">
+                        <div className="p-6 mb-6 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20 flex justify-between items-center">
+                            <div>
+                                <label className="block text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase mb-1">Meta Semanal (Horas)</label>
+                                <input type="number" value={grandTotalHours} onChange={e => setGrandTotalHours(parseInt(e.target.value)||0)} className={`text-3xl font-black bg-transparent ${activeTheme.class} outline-none w-32 border-b-2 border-indigo-300`} />
+                            </div>
+                            <button onClick={distributeHours} className={`${activeTheme.bg} text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition`}>Calcular e Distribuir</button>
+                        </div>
+                        <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+                            {Object.keys(weights).sort().map(s => (
+                                <div key={s} className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-3 h-3 rounded-full" style={{backgroundColor: getColor(s)}}></div>
+                                        <span className="font-bold text-slate-700 dark:text-white">{s}</span>
+                                    </div>
+                                    <div className="flex items-center bg-white dark:bg-slate-900 rounded-lg p-1 shadow-sm">
+                                        <button onClick={() => setWeights({...weights, [s]: Math.max(1, weights[s]-1)})} className="w-8 h-8 font-bold text-slate-400 hover:text-indigo-500">-</button>
+                                        <span className="w-8 text-center font-bold dark:text-white">{weights[s]}</span>
+                                        <button onClick={() => setWeights({...weights, [s]: Math.min(5, weights[s]+1)})} className="w-8 h-8 font-bold text-slate-400 hover:text-indigo-500">+</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Modal>
+
+                    {/* Essay Modal */}
+                    <Modal isOpen={activeModal === 'essay'} onClose={() => setActiveModal(null)} title="Nova Redação">
+                        <form onSubmit={handleAddEssay} className="space-y-5">
+                            <input 
+                                value={essayForm.theme} onChange={e => setEssayForm({...essayForm, theme: e.target.value})}
+                                className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500" placeholder="Tema da redação" 
+                            />
+                            <div className="grid grid-cols-2 gap-4">
+                                <input 
+                                    value={essayForm.genre} onChange={e => setEssayForm({...essayForm, genre: e.target.value})}
+                                    className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500" placeholder="Gênero" 
+                                />
+                                <input 
+                                    type="number" max="1000" value={essayForm.grade} onChange={e => setEssayForm({...essayForm, grade: e.target.value})}
+                                    className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500" placeholder="Nota (0-1000)" 
+                                />
+                            </div>
+                            <button type="submit" className={`w-full py-4 ${activeTheme.bg} text-white rounded-xl font-bold shadow-lg hover:opacity-90`}>Adicionar</button>
+                        </form>
+                    </Modal>
+
+                    {/* Simulado Modal */}
+                    <Modal isOpen={activeModal === 'simulado'} onClose={() => setActiveModal(null)} title="Novo Simulado">
+                        <div className="space-y-6">
+                            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                <button onClick={() => setSimuladoForm({...simuladoForm, type: 'subject'})} className={`flex-1 py-2 rounded-lg text-sm font-bold transition ${simuladoForm.type === 'subject' ? 'bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-white' : 'text-slate-500'}`}>Matéria Específica</button>
+                                <button onClick={() => setSimuladoForm({...simuladoForm, type: 'exam'})} className={`flex-1 py-2 rounded-lg text-sm font-bold transition ${simuladoForm.type === 'exam' ? 'bg-white dark:bg-slate-700 shadow text-purple-600 dark:text-white' : 'text-slate-500'}`}>Prova Completa</button>
+                            </div>
+                            <form onSubmit={handleAddSimulado} className="space-y-5">
+                                {simuladoForm.type === 'subject' ? (
+                                    <>
+                                        <input value={simuladoForm.subjectName} onChange={e => setSimuladoForm({...simuladoForm, subjectName: e.target.value})} className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500" placeholder="Nome da Matéria (Ex: Física)" />
+                                        <input value={simuladoForm.contentTopic} onChange={e => setSimuladoForm({...simuladoForm, contentTopic: e.target.value})} className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500" placeholder="Conteúdo (Ex: Cinemática)" />
+                                    </>
+                                ) : (
+                                    <>
+                                        <input value={simuladoForm.examName} onChange={e => setSimuladoForm({...simuladoForm, examName: e.target.value})} className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-purple-500" placeholder="Nome da Prova (Ex: ENEM 2023)" />
+                                        <input value={simuladoForm.subjectName} onChange={e => setSimuladoForm({...simuladoForm, subjectName: e.target.value})} className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-purple-500" placeholder="Área/Matéria (Ex: Natureza)" />
+                                        <input value={simuladoForm.triScore} onChange={e => setSimuladoForm({...simuladoForm, triScore: e.target.value})} className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-purple-500" placeholder="Nota TRI (Opcional)" type="number" step="0.1" />
+                                    </>
+                                )}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div><label className="block text-xs font-bold text-slate-400 uppercase mb-1">Total Questões</label><input type="number" min="1" value={simuladoForm.totalQ} onChange={e => setSimuladoForm({...simuladoForm, totalQ: e.target.value})} className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-xl font-bold outline-none focus:ring-2 ring-indigo-500"/></div>
+                                    <div><label className="block text-xs font-bold text-slate-400 uppercase mb-1">Acertos</label><input type="number" min="0" value={simuladoForm.correctQ} onChange={e => setSimuladoForm({...simuladoForm, correctQ: e.target.value})} className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-xl font-bold outline-none focus:ring-2 ring-indigo-500"/></div>
+                                </div>
+                                <div><label className="block text-xs font-bold text-slate-400 uppercase mb-1">Análise de Erros</label><textarea value={simuladoForm.notes} onChange={e => setSimuladoForm({...simuladoForm, notes: e.target.value})} className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-xl font-medium outline-none focus:ring-2 ring-indigo-500 h-24 resize-none" placeholder="O que errei?"></textarea></div>
+                                <button type="submit" className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition">Salvar Simulado</button>
+                            </form>
+                        </div>
+                    </Modal>
+
+                    {/* 7. History Modal */}
+                     <Modal isOpen={activeModal === 'history'} onClose={() => setActiveModal(null)} title="Histórico">
+                        <div className="flex flex-col md:flex-row gap-8">
+                            <div className="w-full md:w-1/2">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-xl font-bold dark:text-white">Calendário</h3>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setCurrentCalendarDate(new Date(currentCalendarDate.setMonth(currentCalendarDate.getMonth()-1)))} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">←</button>
+                                        <span className="font-bold dark:text-white min-w-[100px] text-center">{currentCalendarDate.toLocaleDateString('pt-BR', {month:'long'})}</span>
+                                        <button onClick={() => setCurrentCalendarDate(new Date(currentCalendarDate.setMonth(currentCalendarDate.getMonth()+1)))} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">→</button>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-7 gap-2">
+                                    {getCalendarDays().map((d, i) => {
+                                        if(!d) return <div key={i} className="calendar-day empty"></div>;
+                                        const dateCheck = `${currentCalendarDate.getFullYear()}-${String(currentCalendarDate.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                                        const hasEntry = history.some(h => h.dateISO.startsWith(dateCheck));
+                                        return <div key={i} className={`calendar-day text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 ${hasEntry ? `has-history text-white ${activeTheme.bg}` : ''}`}>{d}</div>;
+                                    })}
+                                </div>
+                            </div>
+                            <div className="w-full md:w-1/2 border-l border-slate-100 dark:border-slate-700 pl-8">
+                                <h3 className="text-xl font-bold dark:text-white mb-4">Registros</h3>
+                                <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                                    {history.length === 0 && <p className="text-slate-400">Sem histórico.</p>}
+                                    {history.map(h => (
+                                        <div key={h.id} className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                            <div className="flex justify-between mb-1">
+                                                <span className="font-bold dark:text-white">{new Date(h.dateISO).toLocaleDateString()}</span>
+                                                <span className="font-bold text-indigo-500">{h.percent}%</span>
+                                            </div>
+                                            <p className="text-sm text-slate-500 italic">"{h.note || 'Sem nota'}"</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
+
+                    {/* Toggle Theme & Help */}
+                    <button onClick={() => setIsDark(!isDark)} className="fixed top-6 right-6 z-40 p-3 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:scale-110 transition-all">
+                        {isDark ? <i data-lucide="sun" className="w-6 h-6"></i> : <i data-lucide="moon" className="w-6 h-6"></i>}
+                    </button>
+
+                    <button onClick={() => setShowHelp(!showHelp)} className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-indigo-600 shadow-xl text-white hover:bg-indigo-700 transition-colors">
+                        <i data-lucide="help-circle" className="w-6 h-6"></i>
+                    </button>
+
+                    <div className={`fixed bottom-24 right-6 z-30 max-w-xs bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 ${showHelp ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+                        <h4 className="font-bold mb-2 dark:text-white">Ajuda Rápida</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                            <b>Renomear Matéria:</b> Clique em qualquer matéria na semana e edite o nome no topo do cartão.<br/><br/>
+                            Use o botão <b>Configurar Metas</b> para ajustar pesos (1-5).
+                        </p>
+                    </div>
+
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
